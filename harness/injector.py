@@ -1,28 +1,27 @@
 import psutil
 import time
 import re
-from typing import Optional
+from typing import Optional, List
 
 class ProcessLifecycleGuard:
+    """Manages cross-platform bottom-up process tree termination."""
     def __init__(self, pid: int):
         self.pid = pid
 
     def inject_kill(self, signal_type: str = "SIGKILL") -> bool:
         try:
             parent = psutil.Process(self.pid)
-            # 1. Terminate all child processes recursively
-            try:
-                children = parent.children(recursive=True)
-                for child in children:
-                    try:
-                        if signal_type == "SIGKILL":
-                            child.kill()
-                        else:
-                            child.terminate()
-                    except (psutil.NoSuchProcess, psutil.AccessDenied):
-                        pass
-            except (psutil.NoSuchProcess, psutil.AccessDenied):
-                pass
+            children = parent.children(recursive=True)
+            
+            # 1. Terminate children bottom-up (leaves first)
+            for child in reversed(children):
+                try:
+                    if signal_type == "SIGKILL":
+                        child.kill()
+                    else:
+                        child.terminate()
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    pass
                     
             # 2. Terminate parent process
             try:
@@ -30,10 +29,20 @@ class ProcessLifecycleGuard:
                     parent.kill()
                 else:
                     parent.terminate()
-                parent.wait(timeout=5)
             except (psutil.NoSuchProcess, psutil.AccessDenied):
                 pass
                 
+            # 3. Wait for full tree termination to prevent orphan locks
+            procs = children + [parent]
+            gone, alive = psutil.wait_procs(procs, timeout=3.0)
+            
+            # Force kill any lingering processes
+            for p in alive:
+                try:
+                    p.kill()
+                except (psutil.NoSuchProcess, psutil.AccessDenied):
+                    pass
+                    
             return True
         except (psutil.NoSuchProcess, psutil.TimeoutExpired):
             return False
@@ -49,7 +58,7 @@ class PhaseSentinelWatcher:
         while time.time() - start_time < timeout_seconds:
             line = self.stdout.readline()
             if not line:
-                time.sleep(0.01)
+                time.sleep(0.02)
                 continue
             if self.pattern.search(line):
                 return True

@@ -29,6 +29,7 @@ env/
 venv/
 ENV/
 .letitloop/
+.bench_wal/
 *.wal.jsonl
 .DS_Store
 Thumbs.db
