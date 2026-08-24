@@ -1,0 +1,18 @@
+name: Propose Framework Adapter
+description: Add a new AI agent framework adapter to the Durability Leaderboard.
+labels: ["adapter", "benchmark"]
+body:
+  - type: input
+    id: framework_name
+    attributes:
+      label: Framework Name & Repository URL
+      placeholder: e.g. LangGraph (https://github.com/langchain-ai/langgraph)
+    validations:
+      required: true
+  - type: textarea
+    id: resume_mechanism
+    attributes:
+      label: Crash Resume & State Persistence Mechanism
+      placeholder: How does the framework persist intermediate steps (e.g. SQLite, Redis, custom checkpoints)?
+    validations:
+      required: true
