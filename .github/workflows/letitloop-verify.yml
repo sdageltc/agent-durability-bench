@@ -33,4 +33,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           strict-ast: 'true'
           test-command: 'pytest tests/ -v'
-          auto-install-engine: 'true'
+          auto-install-engine: 'false'
