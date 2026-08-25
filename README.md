@@ -136,4 +136,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete adapter tutorial and con
 
 ## License
 
-MIT License. Copyright (c) 2026 Oguzhan Kayan.
+MIT License. Copyright (c) 2026 sdageltc.
