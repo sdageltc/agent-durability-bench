@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DCP-1.0 Leaderboard | agent-durability-bench</title>
+  <title>DCP-2.0 Leaderboard | agent-durability-bench</title>
   <meta name="description" content="The Open Crash-Resilience & Durability Benchmark for Autonomous AI Coding Agents under physical OS SIGKILL fault injection." />
   <link rel="icon" type="image/png" href="assets/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -181,21 +181,20 @@
     }
 
     .card {
-      background: var(--bg-card);
+      background: var(--bg-surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 32px;
-      margin-bottom: 32px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      padding: 28px;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     }
     .card-header-flex {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 20px;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 18px;
+      gap: 10px;
     }
     .disclosure-box {
       background: rgba(56, 189, 248, 0.05);
@@ -348,37 +347,37 @@
     .copy-btn:hover { background: var(--accent); color: #090d16; }
 
     footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 0;
       text-align: center;
       color: var(--text-dim);
       font-size: 0.85rem;
-      margin: 5rem 0 3rem;
-      border-top: 1px solid var(--border);
-      padding-top: 2rem;
+      margin-top: 3rem;
     }
     .footer-links {
       display: flex;
       justify-content: center;
       gap: 1.5rem;
-      flex-wrap: wrap;
       margin-bottom: 1rem;
+      flex-wrap: wrap;
     }
-    .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
+    .footer-links a { color: var(--text-muted); text-decoration: none; font-weight: 600; }
     .footer-links a:hover { color: var(--accent); }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Universal Top Navigation -->
+    <!-- Top Ecosystem Navbar -->
     <nav>
-      <a href="https://sdageltc.github.io/letitloop/" class="brand">
-        <img src="assets/logo.png" alt="LetItLoop Logo" width="34" height="34" style="border-radius: 8px; object-fit: contain;" />
+      <a href="index.html" class="brand">
+        <img src="assets/logo.png" alt="LetItLoop Logo" width="28" height="28" style="border-radius: 6px;" />
         <span>LetItLoop</span>
-        <span class="brand-badge">DCP-1.0</span>
+        <span class="brand-badge">DCP-2.0</span>
       </a>
       <div class="nav-links">
-        <a href="https://sdageltc.github.io/letitloop/" class="nav-link">Engine Core</a>
+        <a href="https://sdageltc.github.io/letitloop/" class="nav-link">Engine Core (v0.3.0)</a>
         <a href="index.html" class="nav-link active">Durability Bench</a>
-        <a href="https://sdageltc.github.io/letitloop-action/" class="nav-link">CI Action Gate</a>
+        <a href="https://sdageltc.github.io/letitloop-action/" class="nav-link">CI Action Gate (v1.0.3)</a>
         <a href="https://pypi.org/project/letitloop/" target="_blank" class="nav-link" style="color: #60a5fa;">PyPI</a>
         <a href="https://github.com/sdageltc/agent-durability-bench" target="_blank" class="btn-nav-gh">⭐ Benchmark Repo</a>
       </div>
@@ -390,11 +389,11 @@
         <img src="assets/logo.png" alt="LetItLoop Benchmark Shield" width="80" height="80" style="border-radius: 16px; box-shadow: 0 0 35px rgba(56, 189, 248, 0.4); border: 1px solid rgba(56, 189, 248, 0.5);" />
       </div>
       <div class="badge-pill">
-        <span>⚡ Durability Conformance Protocol 1.0 (DCP-1.0)</span>
+        <span>⚡ Durability Conformance Protocol 2.0 (DCP-2.0)</span>
       </div>
       <h1>Agent Durability Bench</h1>
       <p class="subtitle">
-        Empirical crash-resilience & token-waste benchmark for autonomous AI coding agents under physical OS <code>SIGKILL</code> fault injection.
+        Empirical crash-resilience, process containment & token-waste benchmark for autonomous AI coding agents under physical OS <code>SIGKILL</code> fault injection.
       </p>
     </header>
 
@@ -421,11 +420,11 @@
     <!-- Comparative Leaderboard Table -->
     <div class="card">
       <div class="card-header-flex">
-        <h2 style="font-size: 1.45rem; font-weight: 700;">🏆 Architectural Archetype Matrix (DCP-1.0)</h2>
+        <h2 style="font-size: 1.45rem; font-weight: 700;">🏆 Architectural Archetype Matrix (DCP-2.0)</h2>
         <span style="font-size: 0.8rem; color: var(--text-muted);">100 Real Subprocess Trials per Archetype</span>
       </div>
       <div class="disclosure-box">
-        <strong>Methodological Scope Disclosure:</strong> DCP-1.0 evaluates runtime crash durability, process tree containment, and duplicate token waste under abrupt process termination. It does not evaluate single-turn LLM reasoning IQ (use SWE-bench / GAIA for reasoning evaluations).
+        <strong>Methodological Scope Disclosure:</strong> DCP-2.0 evaluates runtime crash durability, process tree containment, and duplicate token waste under abrupt process termination. It measures operational survival rather than single-turn prompt reasoning IQ.
       </div>
 
       <div class="table-container">
@@ -438,7 +437,7 @@
               <th>Token Waste (W<sub>token</sub>)</th>
               <th>Resumption Latency</th>
               <th>State Corruptions</th>
-              <th>DCP-1.0 Status</th>
+              <th>DCP-2.0 Status</th>
             </tr>
           </thead>
           <tbody>
@@ -446,7 +445,7 @@
               <td><span style="font-size: 1.3rem;">🥇</span></td>
               <td>
                 <div class="archetype-name">Atomic WAL Engine</div>
-                <div class="archetype-sub">Reference: LetItLoop / Temporal</div>
+                <div class="archetype-sub">Reference: LetItLoop v0.3.0 (@durable / WAL v2)</div>
               </td>
               <td>
                 <span class="metric-value" style="color: #34d399;">100.0%</span>
@@ -464,7 +463,7 @@
               <td><span style="font-size: 1.3rem;">🥈</span></td>
               <td>
                 <div class="archetype-name">Periodic Snapshot Graph</div>
-                <div class="archetype-sub">Reference: LangGraph / Pregel</div>
+                <div class="archetype-sub">Reference: LangGraph / Pregel Checkpointing</div>
               </td>
               <td>
                 <span class="metric-value" style="color: #60a5fa;">100.0%</span>
@@ -519,48 +518,38 @@
       </div>
     </div>
 
-    <!-- 6 Detailed Crash Scenarios Breakdown with Interactive Filters -->
+    <!-- 4 Deterministic Kill-Window Conformance Scenarios -->
     <div class="card">
-      <h2 style="font-size: 1.45rem; margin-bottom: 6px; font-weight: 700;">💥 6 Real-World Failure Scenarios</h2>
-      <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">DCP-1.0 subjects agent architectures to 6 physical fault injection vectors across 400 test executions:</p>
+      <h2 style="font-size: 1.45rem; margin-bottom: 6px; font-weight: 700;">💥 4 Deterministic Kill-Window Scenarios (DCP-2.0)</h2>
+      <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">DCP-2.0 subjects agent engines to non-maskable OS SIGKILL fault injection across 4 exact sentinel execution points:</p>
       
       <div class="filter-tabs">
-        <button class="filter-btn active" onclick="filterScenarios('all', this)">All Scenarios (6)</button>
-        <button class="filter-btn" onclick="filterScenarios('hard-crash', this)">Hard Process Termination</button>
-        <button class="filter-btn" onclick="filterScenarios('infrastructure', this)">Infrastructure & Memory</button>
-        <button class="filter-btn" onclick="filterScenarios('state', this)">State & Goals</button>
+        <button class="filter-btn active" onclick="filterScenarios('all', this)">All Scenarios (4)</button>
+        <button class="filter-btn" onclick="filterScenarios('runtime', this)">Execution & Runtime</button>
+        <button class="filter-btn" onclick="filterScenarios('state', this)">State & Journal</button>
+        <button class="filter-btn" onclick="filterScenarios('concurrency', this)">Multi-Agent Concurrency</button>
       </div>
 
       <div class="grid-3" id="scenarios-grid">
-        <div class="scenario-card" data-category="hard-crash">
-          <h3>⚡ 1. Mid-Epoch SIGKILL</h3>
-          <p>Process terminated with non-maskable OS <code>SIGKILL</code> midway through executing an atomic AST refactor step.</p>
-          <span class="scenario-badge">WAL: 100% | Snapshot: 100% | In-Mem: 0%</span>
-        </div>
-        <div class="scenario-card" data-category="infrastructure">
-          <h3>🧠 2. Subprocess OOM Crash</h3>
-          <p>Simulates out-of-memory container termination during large whole-file diff generation and memory spikes.</p>
-          <span class="scenario-badge">WAL: 100% | Snapshot: 100% | In-Mem: 0%</span>
-        </div>
-        <div class="scenario-card" data-category="infrastructure">
-          <h3>☁️ 3. Spot Instance Eviction</h3>
-          <p>Zero-warning VM termination during multi-turn LLM generation and tool call processing.</p>
-          <span class="scenario-badge">WAL: 100% | Snapshot: 85% | In-Mem: 0%</span>
-        </div>
-        <div class="scenario-card" data-category="hard-crash">
-          <h3>🐍 4. Unhandled Runtime Bug</h3>
-          <p>Unhandled Python exception during agent self-evolution loop; tests recovery from recorded journal history.</p>
-          <span class="scenario-badge">WAL: 100% | Snapshot: 100% | In-Mem: 0%</span>
+        <div class="scenario-card" data-category="runtime">
+          <h3>⚡ DCP-001: Mid-Step Execution SIGKILL</h3>
+          <p>Process killed with non-maskable <code>SIGKILL</code> while worker subprocess is actively modifying code. Tests whether child processes are reaped and pending steps roll back cleanly.</p>
+          <span class="scenario-badge">WAL v2: 100% | Snapshot: 100% | In-Mem: 0%</span>
         </div>
         <div class="scenario-card" data-category="state">
-          <h3>🔒 5. Atomic Lock Contention</h3>
-          <p>Crash occurs while holding state file locks; verifies atomic rename and zero orphan <code>.tmp</code> lock leakage.</p>
-          <span class="scenario-badge">WAL: 100% | Snapshot: 90% | In-Mem: 0%</span>
+          <h3>💾 DCP-002: Post-Step / Pre-Commit Snapshot SIGKILL</h3>
+          <p>Kill injected immediately after output generation before state snapshot fsync. Tests whether journal recovery re-establishes state without duplicate execution.</p>
+          <span class="scenario-badge">WAL v2: 100% | Snapshot: 85% | In-Mem: 0%</span>
+        </div>
+        <div class="scenario-card" data-category="concurrency">
+          <h3>🔀 DCP-003: Multi-Agent Sibling Merge Conflict Race</h3>
+          <p>Kill injected during concurrent sibling worktree git merge operations. Verifies merge mutexes and pre-rollback safety refs prevent branch corruption.</p>
+          <span class="scenario-badge">WAL v2: 100% | Snapshot: 80% | In-Mem: 0%</span>
         </div>
         <div class="scenario-card" data-category="state">
-          <h3>🎯 6. 10-Step Macro Goal Resumption</h3>
-          <p>Crash injected at Step 8 of a 10-step goal; measures whether steps 1–7 are skipped to prevent duplicate token costs.</p>
-          <span class="scenario-badge">Waste: WAL 0.0% vs Snapshot 14.5%</span>
+          <h3>📄 DCP-004: Torn-Tail Journal Truncation</h3>
+          <p>Simulates power failure / hard VM kill during WAL write. Tests automated truncation of incomplete EOF frames to the last valid checksummed transaction.</p>
+          <span class="scenario-badge">WAL v2: 100% | Snapshot: 60% | In-Mem: 0%</span>
         </div>
       </div>
     </div>
@@ -569,21 +558,25 @@
     <div class="card">
       <h2 style="font-size: 1.45rem; margin-bottom: 14px; font-weight: 700;">🔬 Reproduce Locally</h2>
       <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 16px;">
-        Run the complete 400-task synthetic durability benchmark locally in under 15 seconds without paying cloud LLM API tokens:
+        Run the complete DCP-2.0 conformance benchmark locally in under 15 seconds without paying cloud LLM API tokens:
       </p>
-      <pre><code><button class="copy-btn" onclick="copyCode(this)">Copy</button># Clone and run DCP-1.0 benchmark matrix
+      <pre><code><button class="copy-btn" onclick="copyCode(this)">Copy</button># Run directly with LetItLoop (v0.3.0+)
+pip install letitloop
+lil bench --matrix
+
+# Or run from the benchmark harness repo
 git clone https://github.com/sdageltc/agent-durability-bench.git
 cd agent-durability-bench
 pip install -e .
-durability-bench --matrix --export-json results/leaderboard.json</code></pre>
+python -m harness.runner --matrix</code></pre>
     </div>
 
     <!-- Footer -->
     <footer>
       <div class="footer-links">
-        <a href="https://github.com/sdageltc/letitloop" target="_blank">Engine Core</a>
+        <a href="https://github.com/sdageltc/letitloop" target="_blank">Engine Core (v0.3.0)</a>
         <a href="index.html">Durability Bench</a>
-        <a href="https://sdageltc.github.io/letitloop-action/">GitHub Action</a>
+        <a href="https://sdageltc.github.io/letitloop-action/">GitHub Action (v1.0.3)</a>
         <a href="https://pypi.org/project/letitloop/" target="_blank">PyPI Package</a>
         <a href="https://github.com/sdageltc" target="_blank">Maintainer (@sdageltc)</a>
       </div>
