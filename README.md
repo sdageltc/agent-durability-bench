@@ -5,12 +5,12 @@
 **The Open Crash-Resilience & Durability Benchmark for Autonomous AI Coding Agents**
 
 [![CI](https://github.com/sdageltc/agent-durability-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/sdageltc/agent-durability-bench/actions/workflows/ci.yml)
-[![Benchmark](https://img.shields.io/badge/Benchmark-DCP--1.0-blue.svg)](https://github.com/sdageltc/agent-durability-bench)
+[![Benchmark](https://img.shields.io/badge/Benchmark-DCP--2.0-blue.svg)](https://github.com/sdageltc/agent-durability-bench)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Leaderboard](https://img.shields.io/badge/Leaderboard-Live%20on%20Pages-brightgreen.svg)](https://sdageltc.github.io/agent-durability-bench/)
 
-**[Durability Benchmark](https://github.com/sdageltc/agent-durability-bench)** • **[PR Verification Action](https://github.com/sdageltc/letitloop-action)** • **[Engine Core](https://github.com/sdageltc/letitloop)**
+**[Durability Benchmark](https://github.com/sdageltc/agent-durability-bench)** • **[PR Verification Action](https://github.com/sdageltc/letitloop-action)** • **[Engine Core (v0.3.0)](https://github.com/sdageltc/letitloop)**
 
 </div>
 
@@ -25,13 +25,13 @@ Existing benchmarks like SWE-bench evaluate whether an LLM can resolve an issue 
 - Does a mid-task `SIGKILL`, spot instance eviction, or unhandled exception corrupt local AST files?
 - Are child and grandchild processes cleaned up, or do they leak into the host OS?
 
-`agent-durability-bench` introduces the **Durability Conformance Protocol (DCP-1.0)** to measure crash survival, state integrity, and resumption fidelity across autonomous agent frameworks.
+`agent-durability-bench` introduces the **Durability Conformance Protocol 2.0 (DCP-2.0)** to measure crash survival, state integrity, and resumption fidelity across autonomous agent frameworks under physical OS `SIGKILL` fault injection.
 
 ---
 
 ## Benchmark Comparison: Durability Bench vs. Industry Benchmarks
 
-| Evaluation Dimension | **Durability Bench (DCP-1.0)** | **SWE-bench** | **GAIA** | **AgentBench** |
+| Evaluation Dimension | **Durability Bench (DCP-2.0)** | **SWE-bench** | **GAIA** | **AgentBench** |
 |---|:---:|:---:|:---:|:---:|
 | **Primary Metric** | **Crash Survival & Resumption Fidelity** | Single-Shot Issue Resolution | Multimodal Tool Execution | Multi-Turn LLM Reasoning |
 | **Failure Injection** | **Deterministic `SIGKILL`, OOM, Spot Eviction** | None (Runs to completion or timeout) | None | None |
@@ -42,19 +42,19 @@ Existing benchmarks like SWE-bench evaluate whether an LLM can resolve an issue 
 
 ---
 
-## DCP-1.0 Failure Taxonomy
+## DCP-2.0 Deterministic Kill-Window Taxonomy
 
-The benchmark evaluates three critical failure modes:
+The benchmark evaluates four critical execution failure sentinels:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│                        DCP-1.0 FAILURE MODES                           │
+│                        DCP-2.0 FAILURE SENTINELS                       │
 ├─────────────────────────┬────────────────────────┬─────────────────────┤
-│ 1. Token Inflation      │ 2. State Corruption    │ 3. Orphan Leakage   │
+│ 1. Mid-Step Execution   │ 2. Pre-Commit Snapshot │ 3. Sibling Rollback │
 ├─────────────────────────┼────────────────────────┼─────────────────────┤
-│ Agent loses state after │ Incomplete writes leave│ Background tool     │
-│ crash and re-executes   │ syntax errors, broken  │ processes survive   │
-│ completed steps from 0. │ ASTs, or half-files.   │ crash & consume CPU.│
+│ Non-maskable SIGKILL    │ Kill before state WAL  │ Kill during parallel│
+│ during active subprocess│ fsync; tests journal   │ worktree merge      │
+│ code execution.         │ transaction recovery.  │ conflict resolution.│
 └─────────────────────────┴────────────────────────┴─────────────────────┘
 ```
 
