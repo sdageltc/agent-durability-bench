@@ -1,112 +1,56 @@
-# Contributing to agent-durability-bench
+# Contributing to agent-durability-bench 🛡️
 
-Thank you for helping build the open benchmark for AI agent crash resilience. This guide walks you through implementing a `FrameworkAdapter` to benchmark your framework against the **Durability Conformance Protocol (DCP-1.0)**.
-
----
-
-## The Adapter Contract (DCP-1.0)
-
-Every framework adapter subclasses `BaseAdapter` in `harness/adapters/base.py`:
-
-```python
-from abc import ABC, abstractmethod
-from pathlib import Path
-from typing import Dict, Any
-
-class BaseAdapter(ABC):
-    """Base interface for agent framework durability adapters."""
-
-    def __init__(self, name: str, version: str):
-        self.name = name
-        self.version = version
-
-    @abstractmethod
-    def setup_environment(self, workspace_path: Path, task_spec: Dict[str, Any]) -> None:
-        """Initialize target agent workspace and mock tools."""
-        pass
-
-    @abstractmethod
-    def execute_step(self, step_index: int) -> Dict[str, Any]:
-        """Execute a single agent step and return state receipt."""
-        pass
-
-    @abstractmethod
-    def resume_from_crash(self, crash_checkpoint_path: Path) -> Dict[str, Any]:
-        """Resume execution following an ungraceful SIGKILL."""
-        pass
-
-    @abstractmethod
-    def cleanup(self) -> None:
-        """Terminate all background child/grandchild worker processes."""
-        pass
-```
+Thank you for contributing to the open standard for AI agent durability and crash resilience! This benchmark evaluates runtime crash resilience, process tree isolation, and token waste under ungraceful termination (**Durability Conformance Protocol 1.0 / DCP-1.0**).
 
 ---
 
-## Step-by-Step: Adding a New Framework Adapter
+## Architectural Archetypes & Reference Patterns
 
-### Step 1: Create the Adapter File
-Create `adapters/<framework_name>_adapter.py`:
+DCP-1.0 categorizes agent runtime architectures into four primary archetypes:
 
-```python
-from pathlib import Path
-from typing import Dict, Any
-from harness.adapters.base import BaseAdapter
+1. **Atomic Write-Ahead Log (WAL) Engine**: Append-only log with synchronous disk fsync (e.g., LetItLoop, Temporal).
+2. **Periodic Snapshot Graph**: Checkpointing at superstep/node boundaries (e.g., LangGraph with SqliteSaver).
+3. **In-Memory Event Loop**: Conversational loops with state stored in memory (e.g., AutoGen, CrewAI).
+4. **Unmanaged Script**: Direct Python execution without process supervision.
 
-class LangGraphAdapter(BaseAdapter):
-    def __init__(self):
-        super().__init__(name="langgraph", version="0.2.0")
-        self.active_graph = None
+---
 
-    def setup_environment(self, workspace_path: Path, task_spec: Dict[str, Any]) -> None:
-        self.workspace = workspace_path
-        # Initialize graph state and memory saver checkpointer
+## How to Add Your Framework Adapter
 
-    def execute_step(self, step_index: int) -> Dict[str, Any]:
-        # Run node transition
-        return {"step": step_index, "status": "COMPLETED"}
+We welcome official native adapters from framework maintainers!
 
-    def resume_from_crash(self, crash_checkpoint_path: Path) -> Dict[str, Any]:
-        # Reload state from checkpoint
-        return {"resumed_step": 2, "status": "RESUMED"}
-
-    def cleanup(self) -> None:
-        # Close database connections and worker pools
-        pass
-```
-
-### Step 2: Register in Harness
-Import and register your adapter in `harness/adapters/__init__.py`:
+### Step 1: Subclass `FrameworkAdapter`
+In `adapters/<your_framework>_adapter.py`:
 
 ```python
-from harness.adapters.letitloop_adapter import LetItLoopAdapter
-from adapters.langgraph_adapter import LangGraphAdapter
+from typing import Tuple, Any
+from adapters.base import FrameworkAdapter
+from harness.schema import DurabilityScore, SyntheticTaskSpec
 
-ADAPTER_REGISTRY = {
-    "letitloop": LetItLoopAdapter,
-    "langgraph": LangGraphAdapter,
-}
+class MyFrameworkAdapter(FrameworkAdapter):
+    def __init__(self, wal_dir: str = ".bench_wal"):
+        self.wal_dir = wal_dir
+
+    @property
+    def name(self) -> str:
+        return "my_framework"
+
+    def start_task(self, spec: SyntheticTaskSpec) -> Tuple[int, Any]:
+        """Spawns your framework in a child subprocess. Returns (PID, stdout)."""
+        ...
+
+    def resume_task(self, spec: SyntheticTaskSpec) -> DurabilityScore:
+        """Resumes execution after SIGKILL and reports recovered steps and token waste."""
+        ...
 ```
 
-### Step 3: Run Conformance Verification
-Verify your adapter passes all DCP-1.0 test suites locally:
+### Step 2: Register in `harness/runner.py`
+Add your adapter to `ADAPTERS` in `harness/runner.py`.
 
+### Step 3: Run the Test Suite
 ```bash
-# Run unit tests
-pytest tests/test_conformance.py -v
-
-# Run crash injection test
-python -m harness.runner --framework <your-framework> --signal SIGKILL
+pytest tests/ -v
+python -m harness.runner --matrix
 ```
 
----
-
-## Submitting Your Pull Request
-
-1. Fork the repository and create a branch: `git checkout -b adapter/add-<framework-name>`.
-2. Ensure your adapter passes `pytest tests/` with zero failures.
-3. Run the anti-slop linter on all documentation:
-   ```bash
-   python .agents/scripts/slop_checker.py README.md
-   ```
-4. Open a Pull Request using the standard [New Adapter Issue Form](https://github.com/sdageltc/agent-durability-bench/issues/new?template=new_adapter.yml).
+Submit a Pull Request on GitHub to have your framework benchmarked on the official leaderboard!

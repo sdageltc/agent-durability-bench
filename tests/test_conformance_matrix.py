@@ -2,15 +2,16 @@ import tempfile
 import pathlib
 import json
 import pytest
-from harness.runner import DurabilityBenchmarkRunner, ADAPTERS
+from harness.runner import DurabilityBenchmarkRunner, ADAPTERS, PRIMARY_ARCHETYPES
 from harness.schema import SyntheticTaskSpec, SyntheticStep
 
-def test_all_adapters_registered():
-    assert "letitloop" in ADAPTERS
-    assert "langgraph" in ADAPTERS
-    assert "autogen" in ADAPTERS
-    assert "crewai" in ADAPTERS
-    assert "raw_python" in ADAPTERS
+def test_all_archetypes_registered():
+    for arch in PRIMARY_ARCHETYPES:
+        assert arch in ADAPTERS
+    assert "atomic_wal" in ADAPTERS
+    assert "snapshot_graph" in ADAPTERS
+    assert "in_memory_loop" in ADAPTERS
+    assert "unmanaged_script" in ADAPTERS
 
 def test_durability_matrix_sweep_math():
     with tempfile.TemporaryDirectory() as tmpdir:
@@ -26,14 +27,15 @@ def test_durability_matrix_sweep_math():
         )
         
         results = runner.run_matrix_sweep(tasks=[task])
-        assert len(results) == len(ADAPTERS)
+        assert len(results) == len(PRIMARY_ARCHETYPES)
         
         leaderboard_data = runner.compile_leaderboard(results)
         assert leaderboard_data["protocol_version"] == "DCP-1.0"
+        assert "methodology" in leaderboard_data
         
-        # letitloop must be rank 1 with 100% recovery and 0% waste
+        # atomic_wal must be rank 1 with 100% recovery and 0% waste
         rank1 = leaderboard_data["leaderboard"][0]
-        assert rank1["framework"] == "letitloop"
+        assert rank1["framework"] == "atomic_wal"
         assert rank1["recovery_rate_pct"] == 100.0
         assert rank1["avg_duplicate_token_waste_pct"] == 0.0
         assert rank1["dcp_status"] == "CONFORMANT"
@@ -49,6 +51,7 @@ def test_export_markdown_leaderboard():
         
         content = pathlib.Path(md_path).read_text(encoding="utf-8")
         assert "Durability Conformance Protocol (DCP-1.0) Leaderboard" in content
-        assert "letitloop" in content
+        assert "Atomic WAL Engine" in content
+        assert "Methodological Scope Disclosure" in content
         assert "🟢 CONFORMANT" in content
         assert "🔴 NON-CONFORMANT" in content

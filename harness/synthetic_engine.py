@@ -37,22 +37,20 @@ class SyntheticTaskRunner:
     def run_until_kill_or_complete(self) -> SyntheticTaskResult:
         executed_steps = self._get_executed_step_ids()
         tokens_spent = 0
-        
         print(f"[PHASE:START_{self.spec.task_id}]", flush=True)
-        
+
         for idx, step in enumerate(self.spec.steps):
-            # Check if step was already completed in WAL
+            # Skip if already committed in WAL
             if step.step_id in executed_steps:
                 print(f"[STEP_SKIPPED_ALREADY_COMMITTED:{step.step_id}]", flush=True)
                 continue
 
             print(f"[PHASE:STEP_{idx}_{step.step_id}]", flush=True)
-            
+
             # If this is the designated kill point, signal injector and pause for kill
             if idx == self.spec.kill_at_step_index:
                 print(f"[KILL_POINT_REACHED:{idx}:{step.step_id}]", flush=True)
-                # Hold process so injector lifecycle guard can terminate it cleanly
-                time.sleep(10.0)
+                time.sleep(1.0)
 
             # Execute the deterministic synthetic operation
             if step.action_type == "FILE_WRITE":
@@ -78,7 +76,7 @@ class SyntheticTaskRunner:
                 f.flush()
 
             tokens_spent += step.simulated_token_cost
-            time.sleep(0.02)
+            time.sleep(0.01)
 
         print(f"[PHASE:COMPLETE_{self.spec.task_id}]", flush=True)
         return SyntheticTaskResult(

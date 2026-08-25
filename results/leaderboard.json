@@ -1,0 +1,43 @@
+{
+  "protocol_version": "DCP-1.0",
+  "methodology": "Physical OS Subprocess Fault Injection (SIGKILL)",
+  "timestamp": 1787657174.84086,
+  "leaderboard": [
+    {
+      "framework": "atomic_wal",
+      "archetype_label": "Atomic WAL Engine (LetItLoop / Temporal)",
+      "recovery_rate_pct": 100.0,
+      "avg_duplicate_token_waste_pct": 0.0,
+      "avg_recovery_latency_ms": 1.01,
+      "state_corruptions": 0,
+      "dcp_status": "CONFORMANT"
+    },
+    {
+      "framework": "snapshot_graph",
+      "archetype_label": "Periodic Snapshot Graph (LangGraph / Pregel)",
+      "recovery_rate_pct": 100.0,
+      "avg_duplicate_token_waste_pct": 14.5,
+      "avg_recovery_latency_ms": 50.76,
+      "state_corruptions": 0,
+      "dcp_status": "NON_CONFORMANT"
+    },
+    {
+      "framework": "in_memory_loop",
+      "archetype_label": "In-Memory Event Loop (AutoGen / CrewAI)",
+      "recovery_rate_pct": 0.0,
+      "avg_duplicate_token_waste_pct": 100.0,
+      "avg_recovery_latency_ms": 0.0,
+      "state_corruptions": 2,
+      "dcp_status": "NON_CONFORMANT"
+    },
+    {
+      "framework": "unmanaged_script",
+      "archetype_label": "Unmanaged Script Execution (Raw Python CLI)",
+      "recovery_rate_pct": 0.0,
+      "avg_duplicate_token_waste_pct": 100.0,
+      "avg_recovery_latency_ms": 0.0,
+      "state_corruptions": 2,
+      "dcp_status": "NON_CONFORMANT"
+    }
+  ]
+}
