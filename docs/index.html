@@ -11,38 +11,113 @@
   <style>
     :root {
       --bg: #090d16;
-      --card-bg: rgba(17, 24, 39, 0.85);
-      --card-border: rgba(255, 255, 255, 0.08);
-      --text: #f3f4f6;
-      --text-muted: #9ca3af;
-      --primary: #3b82f6;
-      --primary-glow: rgba(59, 130, 246, 0.25);
-      --success: #10b981;
-      --success-glow: rgba(16, 185, 129, 0.2);
+      --bg-surface: rgba(17, 24, 39, 0.85);
+      --bg-card: rgba(22, 30, 46, 0.7);
+      --bg-code: #0b0f19;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(56, 189, 248, 0.35);
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent: #38bdf8;
+      --accent-glow: rgba(56, 189, 248, 0.25);
+      --green: #10b981;
+      --green-glow: rgba(16, 185, 129, 0.2);
       --danger: #ef4444;
       --danger-glow: rgba(239, 68, 68, 0.2);
-      --gold: #f59e0b;
-      --silver: #94a3b8;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --radius: 14px;
+      --radius-sm: 8px;
     }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       background-color: var(--bg);
       color: var(--text);
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: var(--font-sans);
       min-height: 100vh;
       line-height: 1.6;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.15) 0px, transparent 50%),
         radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
     }
+
     .container {
-      max-width: 1140px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 40px 24px 80px;
+      padding: 0 1.5rem;
     }
+
+    /* Universal Ecosystem Top Navigation */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(9, 13, 22, 0.85);
+      backdrop-filter: blur(16px);
+      z-index: 100;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 800;
+      font-size: 1.25rem;
+      text-decoration: none;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .brand-badge {
+      background: rgba(168, 85, 247, 0.15);
+      color: #c084fc;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      border: 1px solid rgba(168, 85, 247, 0.35);
+    }
+    .nav-links {
+      display: flex;
+      gap: 1.25rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--accent); }
+    .btn-nav-gh {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.45rem 0.9rem;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-nav-gh:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
     header {
       text-align: center;
-      margin-bottom: 40px;
+      padding: 3.5rem 0 2rem;
     }
     .badge-pill {
       display: inline-flex;
@@ -50,46 +125,49 @@
       gap: 8px;
       padding: 6px 18px;
       border-radius: 9999px;
-      background: rgba(59, 130, 246, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.3);
-      color: #60a5fa;
-      font-size: 0.875rem;
-      font-weight: 600;
-      margin-bottom: 20px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid var(--border-accent);
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 18px;
       letter-spacing: 0.02em;
     }
     h1 {
-      font-size: 2.75rem;
+      font-size: 3rem;
       font-weight: 800;
       letter-spacing: -0.03em;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       background: linear-gradient(135deg, #ffffff 0%, #93c5fd 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
     p.subtitle {
       color: var(--text-muted);
-      font-size: 1.125rem;
-      max-width: 760px;
-      margin: 0 auto 24px;
+      font-size: 1.15rem;
+      max-width: 780px;
+      margin: 0 auto;
     }
+
+    /* Stats Overview */
     .stats-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 16px;
-      margin-bottom: 32px;
+      margin: 2.5rem 0;
     }
     .stat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       padding: 20px;
       text-align: center;
+      backdrop-filter: blur(12px);
     }
     .stat-val {
-      font-size: 1.85rem;
+      font-size: 2rem;
       font-weight: 800;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--font-mono);
       color: #fff;
     }
     .stat-lbl {
@@ -98,33 +176,13 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
       margin-top: 4px;
+      font-weight: 600;
     }
-    .ecosystem-nav {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      margin-top: 16px;
-    }
-    .ecosystem-nav a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.9rem;
-      padding: 8px 16px;
-      border-radius: 8px;
-      border: 1px solid var(--card-border);
-      background: var(--card-bg);
-      transition: all 0.2s ease;
-    }
-    .ecosystem-nav a:hover {
-      color: #fff;
-      border-color: var(--primary);
-      box-shadow: 0 0 15px var(--primary-glow);
-    }
+
     .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       padding: 32px;
       margin-bottom: 32px;
       backdrop-filter: blur(12px);
@@ -136,58 +194,33 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .disclosure-box {
-      background: rgba(59, 130, 246, 0.05);
-      border-left: 4px solid var(--primary);
+      background: rgba(56, 189, 248, 0.05);
+      border-left: 4px solid var(--accent);
       padding: 16px 20px;
-      border-radius: 0 12px 12px 0;
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
       margin-bottom: 24px;
       font-size: 0.92rem;
       color: #cbd5e1;
     }
-    .table-container {
-      overflow-x: auto;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.95rem;
-    }
+    .table-container { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem; }
     th {
       padding: 14px 16px;
       color: var(--text-muted);
-      font-weight: 600;
-      border-bottom: 1px solid var(--card-border);
+      font-weight: 700;
+      border-bottom: 1px solid var(--border);
       text-transform: uppercase;
       font-size: 0.75rem;
       letter-spacing: 0.05em;
     }
-    td {
-      padding: 18px 16px;
-      border-bottom: 1px solid var(--card-border);
-      vertical-align: middle;
-    }
+    td { padding: 18px 16px; border-bottom: 1px solid var(--border); vertical-align: middle; }
     tr:last-child td { border-bottom: none; }
-    .archetype-name {
-      font-weight: 700;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .archetype-sub {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      font-weight: 400;
-      margin-top: 2px;
-    }
-    .metric-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 600;
-    }
+    .archetype-name { font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .archetype-sub { font-size: 0.8rem; color: var(--text-muted); font-weight: 400; margin-top: 2px; }
+    .metric-value { font-family: var(--font-mono); font-weight: 600; }
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -201,38 +234,64 @@
     .status-conformant {
       background: rgba(16, 185, 129, 0.15);
       color: #34d399;
-      border: 1px solid rgba(16, 185, 129, 0.3);
+      border: 1px solid rgba(16, 185, 129, 0.35);
     }
     .status-nonconformant {
       background: rgba(239, 68, 68, 0.15);
       color: #f87171;
-      border: 1px solid rgba(239, 68, 68, 0.3);
+      border: 1px solid rgba(239, 68, 68, 0.35);
     }
     .progress-bar-bg {
       background: rgba(255, 255, 255, 0.08);
       height: 8px;
       border-radius: 4px;
-      width: 90px;
+      width: 80px;
       display: inline-block;
       vertical-align: middle;
       margin-left: 8px;
       overflow: hidden;
     }
-    .progress-bar-fill {
-      height: 100%;
-      border-radius: 4px;
+    .progress-bar-fill { height: 100%; border-radius: 4px; }
+
+    /* Interactive Scenario Filters */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
     }
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .filter-btn.active {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--border-accent);
+      color: var(--accent);
+    }
+
     .grid-3 {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 20px;
-      margin-top: 20px;
     }
     .scenario-card {
       background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
       padding: 22px;
+      transition: all 0.2s;
+    }
+    .scenario-card:hover {
+      border-color: var(--border-accent);
+      background: rgba(255, 255, 255, 0.04);
     }
     .scenario-card h3 {
       font-size: 1.05rem;
@@ -253,22 +312,77 @@
       font-size: 0.75rem;
       padding: 3px 8px;
       border-radius: 6px;
-      background: rgba(59, 130, 246, 0.15);
+      background: rgba(56, 189, 248, 0.12);
       color: #93c5fd;
-      font-family: 'JetBrains Mono', monospace;
+      font-family: var(--font-mono);
+      font-weight: 600;
     }
+
+    pre {
+      background: var(--bg-code);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      color: #e2e8f0;
+      position: relative;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 4px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.75rem;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .copy-btn:hover { background: var(--accent); color: #090d16; }
+
     footer {
       text-align: center;
-      color: var(--text-muted);
+      color: var(--text-dim);
       font-size: 0.85rem;
-      margin-top: 48px;
-      border-top: 1px solid var(--card-border);
-      padding-top: 32px;
+      margin: 5rem 0 3rem;
+      border-top: 1px solid var(--border);
+      padding-top: 2rem;
     }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; }
+    .footer-links a:hover { color: var(--accent); }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Universal Top Navigation -->
+    <nav>
+      <a href="https://sdageltc.github.io/letitloop/" class="brand">
+        <span>LetItLoop</span>
+        <span class="brand-badge">DCP-1.0</span>
+      </a>
+      <div class="nav-links">
+        <a href="https://sdageltc.github.io/letitloop/" class="nav-link">Engine Core</a>
+        <a href="index.html" class="nav-link active">Durability Bench</a>
+        <a href="https://sdageltc.github.io/letitloop-action/" class="nav-link">CI Action Gate</a>
+        <a href="https://pypi.org/project/letitloop/" target="_blank" class="nav-link" style="color: #60a5fa;">PyPI</a>
+        <a href="https://github.com/sdageltc/agent-durability-bench" target="_blank" class="btn-nav-gh">⭐ Benchmark Repo</a>
+      </div>
+    </nav>
+
+    <!-- Header -->
     <header>
       <div class="badge-pill">
         <span>⚡ Durability Conformance Protocol 1.0 (DCP-1.0)</span>
@@ -277,13 +391,9 @@
       <p class="subtitle">
         Empirical crash-resilience & token-waste benchmark for autonomous AI coding agents under physical OS <code>SIGKILL</code> fault injection.
       </p>
-      <div class="ecosystem-nav">
-        <a href="https://github.com/sdageltc/agent-durability-bench" target="_blank" rel="noreferrer">💻 Benchmark Repo</a>
-        <a href="https://github.com/sdageltc/letitloop" target="_blank" rel="noreferrer">⚙️ LetItLoop Engine</a>
-        <a href="https://github.com/sdageltc/letitloop-action" target="_blank" rel="noreferrer">🛡️ Verification Action</a>
-      </div>
     </header>
 
+    <!-- Stats Row -->
     <div class="stats-row">
       <div class="stat-card">
         <div class="stat-val" style="color: #60a5fa;">400</div>
@@ -291,19 +401,19 @@
       </div>
       <div class="stat-card">
         <div class="stat-val" style="color: #34d399;">100.0%</div>
-        <div class="stat-lbl">Top Recovery Rate</div>
+        <div class="stat-lbl">Top Recovery Rate (R<sub>crash</sub>)</div>
       </div>
       <div class="stat-card">
         <div class="stat-val" style="color: #34d399;">0.0%</div>
-        <div class="stat-lbl">Minimum Token Waste</div>
+        <div class="stat-lbl">Minimum Token Waste (W<sub>token</sub>)</div>
       </div>
       <div class="stat-card">
-        <div class="stat-val" style="color: #a78bfa;">1.01 ms</div>
-        <div class="stat-lbl">Fastest Resumption</div>
+        <div class="stat-val" style="color: #c084fc;">1.01 ms</div>
+        <div class="stat-lbl">Fastest Resumption Latency</div>
       </div>
     </div>
 
-    <!-- Primary Comparative Archetype Table -->
+    <!-- Comparative Leaderboard Table -->
     <div class="card">
       <div class="card-header-flex">
         <h2 style="font-size: 1.45rem; font-weight: 700;">🏆 Architectural Archetype Matrix (DCP-1.0)</h2>
@@ -319,8 +429,8 @@
             <tr>
               <th>Rank</th>
               <th>Architectural Archetype & Reference Pattern</th>
-              <th>Crash Recovery ($R_{crash}$)</th>
-              <th>Token Waste ($W_{token}$)</th>
+              <th>Crash Recovery (R<sub>crash</sub>)</th>
+              <th>Token Waste (W<sub>token</sub>)</th>
               <th>Resumption Latency</th>
               <th>State Corruptions</th>
               <th>DCP-1.0 Status</th>
@@ -404,38 +514,45 @@
       </div>
     </div>
 
-    <!-- 6 Detailed Crash Scenarios Breakdown -->
+    <!-- 6 Detailed Crash Scenarios Breakdown with Interactive Filters -->
     <div class="card">
-      <h2 style="font-size: 1.45rem; margin-bottom: 6px; font-weight: 700;">💥 Detailed Failure Scenario Taxonomy</h2>
-      <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">DCP-1.0 subjects agents to 6 real-world fault injection vectors across 400 test executions:</p>
+      <h2 style="font-size: 1.45rem; margin-bottom: 6px; font-weight: 700;">💥 6 Real-World Failure Scenarios</h2>
+      <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">DCP-1.0 subjects agent architectures to 6 physical fault injection vectors across 400 test executions:</p>
       
-      <div class="grid-3">
-        <div class="scenario-card">
+      <div class="filter-tabs">
+        <button class="filter-btn active" onclick="filterScenarios('all', this)">All Scenarios (6)</button>
+        <button class="filter-btn" onclick="filterScenarios('hard-crash', this)">Hard Process Termination</button>
+        <button class="filter-btn" onclick="filterScenarios('infrastructure', this)">Infrastructure & Memory</button>
+        <button class="filter-btn" onclick="filterScenarios('state', this)">State & Goals</button>
+      </div>
+
+      <div class="grid-3" id="scenarios-grid">
+        <div class="scenario-card" data-category="hard-crash">
           <h3>⚡ 1. Mid-Epoch SIGKILL</h3>
           <p>Process terminated with non-maskable OS <code>SIGKILL</code> midway through executing an atomic AST refactor step.</p>
           <span class="scenario-badge">WAL: 100% | Snapshot: 100% | In-Mem: 0%</span>
         </div>
-        <div class="scenario-card">
+        <div class="scenario-card" data-category="infrastructure">
           <h3>🧠 2. Subprocess OOM Crash</h3>
           <p>Simulates out-of-memory container termination during large whole-file diff generation and memory spikes.</p>
           <span class="scenario-badge">WAL: 100% | Snapshot: 100% | In-Mem: 0%</span>
         </div>
-        <div class="scenario-card">
+        <div class="scenario-card" data-category="infrastructure">
           <h3>☁️ 3. Spot Instance Eviction</h3>
           <p>Zero-warning VM termination during multi-turn LLM generation and tool call processing.</p>
           <span class="scenario-badge">WAL: 100% | Snapshot: 85% | In-Mem: 0%</span>
         </div>
-        <div class="scenario-card">
+        <div class="scenario-card" data-category="hard-crash">
           <h3>🐍 4. Unhandled Runtime Bug</h3>
           <p>Unhandled Python exception during agent self-evolution loop; tests recovery from recorded journal history.</p>
           <span class="scenario-badge">WAL: 100% | Snapshot: 100% | In-Mem: 0%</span>
         </div>
-        <div class="scenario-card">
+        <div class="scenario-card" data-category="state">
           <h3>🔒 5. Atomic Lock Contention</h3>
           <p>Crash occurs while holding state file locks; verifies atomic rename and zero orphan <code>.tmp</code> lock leakage.</p>
           <span class="scenario-badge">WAL: 100% | Snapshot: 90% | In-Mem: 0%</span>
         </div>
-        <div class="scenario-card">
+        <div class="scenario-card" data-category="state">
           <h3>🎯 6. 10-Step Macro Goal Resumption</h3>
           <p>Crash injected at Step 8 of a 10-step goal; measures whether steps 1–7 are skipped to prevent duplicate token costs.</p>
           <span class="scenario-badge">Waste: WAL 0.0% vs Snapshot 14.5%</span>
@@ -449,16 +566,48 @@
       <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 16px;">
         Run the complete 400-task synthetic durability benchmark locally in under 15 seconds without paying cloud LLM API tokens:
       </p>
-      <pre style="background: #030712; border: 1px solid var(--card-border); border-radius: 10px; padding: 18px; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: #e2e8f0;"><code># Clone and run DCP-1.0 benchmark matrix
+      <pre><code><button class="copy-btn" onclick="copyCode(this)">Copy</button># Clone and run DCP-1.0 benchmark matrix
 git clone https://github.com/sdageltc/agent-durability-bench.git
 cd agent-durability-bench
 pip install -e .
 durability-bench --matrix --export-json results/leaderboard.json</code></pre>
     </div>
 
+    <!-- Footer -->
     <footer>
-      <p>Maintained by <a href="https://github.com/sdageltc" style="color: #60a5fa; text-decoration: none;">@sdageltc</a> • Published under MIT License</p>
+      <div class="footer-links">
+        <a href="https://github.com/sdageltc/letitloop" target="_blank">Engine Core</a>
+        <a href="index.html">Durability Bench</a>
+        <a href="https://sdageltc.github.io/letitloop-action/">GitHub Action</a>
+        <a href="https://pypi.org/project/letitloop/" target="_blank">PyPI Package</a>
+        <a href="https://github.com/sdageltc" target="_blank">Maintainer (@sdageltc)</a>
+      </div>
+      <p>© 2026 sdageltc • Open source under the MIT License.</p>
     </footer>
   </div>
+
+  <script>
+    function filterScenarios(category, btn) {
+      document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+      btn.classList.add('active');
+      const cards = document.querySelectorAll('.scenario-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-category') === category) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function copyCode(btn) {
+      const code = btn.parentElement.innerText.replace('Copy', '').trim();
+      navigator.clipboard.writeText(code).then(() => {
+        const old = btn.innerText;
+        btn.innerText = 'Copied!';
+        setTimeout(() => { btn.innerText = old; }, 2000);
+      });
+    }
+  </script>
 </body>
 </html>
