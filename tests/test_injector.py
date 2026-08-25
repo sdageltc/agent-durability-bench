@@ -1,7 +1,6 @@
 import subprocess
 import sys
 import time
-import pytest
 from harness.injector import ProcessLifecycleGuard, PhaseSentinelWatcher
 
 def test_injector_recursively_kills_process_tree():

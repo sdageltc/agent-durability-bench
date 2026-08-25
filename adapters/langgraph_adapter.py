@@ -1,5 +1,4 @@
 import time
-import pathlib
 from typing import Tuple, Any
 from adapters.base import FrameworkAdapter
 from harness.schema import DurabilityScore, SyntheticTaskSpec

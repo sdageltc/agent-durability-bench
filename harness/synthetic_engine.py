@@ -1,10 +1,8 @@
-import os
-import sys
 import time
 import json
 import pathlib
 from typing import Dict, Any, Optional
-from harness.schema import SyntheticTaskSpec, SyntheticStep
+from harness.schema import SyntheticTaskSpec
 
 class SyntheticTaskResult:
     def __init__(self, completed: bool, steps_executed: int, total_tokens: int, checkpoint_state: Dict[str, Any]):

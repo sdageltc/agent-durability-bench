@@ -1,6 +1,5 @@
 import tempfile
 import pathlib
-import pytest
 from adapters.letitloop_adapter import LetItLoopAdapter
 from harness.schema import SyntheticTaskSpec, SyntheticStep
 

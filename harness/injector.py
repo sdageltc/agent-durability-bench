@@ -3,7 +3,7 @@ import time
 import re
 import queue
 import threading
-from typing import Optional, List
+from typing import Optional
 
 class ProcessLifecycleGuard:
     """Manages cross-platform bottom-up process tree termination."""
