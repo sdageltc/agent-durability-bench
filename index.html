@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DCP-1.0 Leaderboard | agent-durability-bench</title>
+  <meta name="description" content="The Open Crash-Resilience & Durability Benchmark for Autonomous AI Coding Agents under physical OS SIGKILL fault injection." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: rgba(17, 24, 39, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --primary: #3b82f6;
+      --primary-glow: rgba(59, 130, 246, 0.25);
+      --success: #10b981;
+      --success-glow: rgba(16, 185, 129, 0.2);
+      --danger: #ef4444;
+      --danger-glow: rgba(239, 68, 68, 0.2);
+      --gold: #f59e0b;
+      --silver: #94a3b8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: #60a5fa;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 0.02em;
+    }
+    h1 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff 0%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1.125rem;
+      max-width: 720px;
+      margin: 0 auto 24px;
+    }
+    .ecosystem-nav {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .ecosystem-nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      transition: all 0.2s ease;
+    }
+    .ecosystem-nav a:hover {
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 0 15px var(--primary-glow);
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 32px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    .disclosure-box {
+      background: rgba(59, 130, 246, 0.05);
+      border-left: 4px solid var(--primary);
+      padding: 16px 20px;
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 28px;
+      font-size: 0.95rem;
+      color: #cbd5e1;
+    }
+    .table-container {
+      overflow-x: auto;
+      margin-top: 16px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    th {
+      padding: 16px;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--card-border);
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+    td {
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--card-border);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    .archetype-name {
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .archetype-sub {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-top: 2px;
+    }
+    .metric-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .status-conformant {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    .status-nonconformant {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 24px;
+    }
+    .method-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+    .method-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+      color: #93c5fd;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .method-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    footer {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 48px;
+      border-top: 1px solid var(--card-border);
+      padding-top: 32px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge-pill">
+        <span>⚡ Durability Conformance Protocol 1.0 (DCP-1.0)</span>
+      </div>
+      <h1>Agent Durability Bench</h1>
+      <p class="subtitle">
+        Empirical crash-resilience & token-waste benchmark for autonomous AI coding agents under physical OS <code>SIGKILL</code> fault injection.
+      </p>
+      <div class="ecosystem-nav">
+        <a href="https://github.com/sdageltc/agent-durability-bench" target="_blank" rel="noreferrer">💻 Benchmark Repo</a>
+        <a href="https://github.com/sdageltc/letitloop" target="_blank" rel="noreferrer">⚙️ LetItLoop Engine</a>
+        <a href="https://github.com/sdageltc/letitloop-action" target="_blank" rel="noreferrer">🛡️ Verification Action</a>
+      </div>
+    </header>
+
+    <div class="card">
+      <div class="disclosure-box">
+        <strong>Methodological Scope Disclosure:</strong> DCP-1.0 evaluates runtime crash durability, process isolation, and duplicate token waste under abrupt process termination. It does not evaluate LLM reasoning IQ or single-turn coding capabilities (use SWE-bench / GAIA for reasoning evaluations).
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Architectural Archetype & Reference Pattern</th>
+              <th>Crash Recovery ($R_{crash}$)</th>
+              <th>Token Waste ($W_{token}$)</th>
+              <th>Resumption Latency</th>
+              <th>DCP-1.0 Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span style="font-size: 1.3rem;">🥇</span></td>
+              <td>
+                <div class="archetype-name">Atomic WAL Engine</div>
+                <div class="archetype-sub">Reference: LetItLoop / Temporal</div>
+              </td>
+              <td><span class="metric-value" style="color: #34d399;">100.0%</span></td>
+              <td><span class="metric-value" style="color: #34d399;">0.0%</span></td>
+              <td><span class="metric-value">1.01 ms</span></td>
+              <td><span class="status-badge status-conformant">🟢 CONFORMANT</span></td>
+            </tr>
+            <tr>
+              <td><span style="font-size: 1.3rem;">🥈</span></td>
+              <td>
+                <div class="archetype-name">Periodic Snapshot Graph</div>
+                <div class="archetype-sub">Reference: LangGraph / Pregel</div>
+              </td>
+              <td><span class="metric-value" style="color: #60a5fa;">100.0%</span></td>
+              <td><span class="metric-value" style="color: #f87171;">14.5%</span></td>
+              <td><span class="metric-value">50.76 ms</span></td>
+              <td><span class="status-badge status-nonconformant">🔴 NON-CONFORMANT</span></td>
+            </tr>
+            <tr>
+              <td><span style="font-weight: 700; color: var(--text-muted);">3</span></td>
+              <td>
+                <div class="archetype-name">In-Memory Event Loop</div>
+                <div class="archetype-sub">Reference: AutoGen / CrewAI</div>
+              </td>
+              <td><span class="metric-value" style="color: #f87171;">0.0%</span></td>
+              <td><span class="metric-value" style="color: #f87171;">100.0%</span></td>
+              <td><span class="metric-value">0.0 ms</span></td>
+              <td><span class="status-badge status-nonconformant">🔴 NON-CONFORMANT</span></td>
+            </tr>
+            <tr>
+              <td><span style="font-weight: 700; color: var(--text-muted);">4</span></td>
+              <td>
+                <div class="archetype-name">Unmanaged Script Execution</div>
+                <div class="archetype-sub">Reference: Raw Python CLI / Ad-hoc Agent</div>
+              </td>
+              <td><span class="metric-value" style="color: #f87171;">0.0%</span></td>
+              <td><span class="metric-value" style="color: #f87171;">100.0%</span></td>
+              <td><span class="metric-value">0.0 ms</span></td>
+              <td><span class="status-badge status-nonconformant">🔴 NON-CONFORMANT</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 style="font-size: 1.5rem; margin-bottom: 20px; font-weight: 700;">Empirical Methodology Invariants</h2>
+      <div class="grid-2">
+        <div class="method-card">
+          <h3>💥 Physical Process Fault Injection</h3>
+          <p>Processes execute as real OS child subprocesses and are terminated abruptly midway through atomic operations using non-maskable <code>SIGKILL</code> (<code>taskkill /F /T</code> on Windows).</p>
+        </div>
+        <div class="method-card">
+          <h3>⚡ Zero-API Synthetic Harness</h3>
+          <p>Eliminates cloud latency, billing spikes, and rate-limiting flakiness by evaluating execution state transitions deterministically in under 15 seconds.</p>
+        </div>
+        <div class="method-card">
+          <h3>💸 Token Waste Accounting ($W_{token}$)</h3>
+          <p>Re-executed tool invocations on resumed tasks are tracked as duplicated waste tokens ($W_{token}$), penalizing architectures that lose execution state.</p>
+        </div>
+        <div class="method-card">
+          <h3>🛡️ State Corruption Detection</h3>
+          <p>Verifies whether mid-task terminations leave broken AST files, corrupted JSON journals, or unreleased lock files on disk.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Maintained by <a href="https://github.com/sdageltc" style="color: #60a5fa; text-decoration: none;">@sdageltc</a> • Published under MIT License</p>
+    </footer>
+  </div>
+</body>
+</html>
