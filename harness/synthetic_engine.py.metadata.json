@@ -1,4 +1,4 @@
 {
-  "summary": "Implement deterministic synthetic task runner for crash-recovery benchmarking with zero API key dependencies.",
-  "updatedAt": "2026-08-24T13:16:07.526943700Z"
+  "summary": "Updated SyntheticTaskRunner with sub-second fault injection hold.",
+  "updatedAt": "2026-08-25T11:24:18.056847800Z"
 }

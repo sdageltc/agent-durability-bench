@@ -1,6 +1,8 @@
 import psutil
 import time
 import re
+import queue
+import threading
 from typing import Optional, List
 
 class ProcessLifecycleGuard:
@@ -48,18 +50,36 @@ class ProcessLifecycleGuard:
             return False
 
 class PhaseSentinelWatcher:
-    """Watches process stdout stream until target lifecycle phase sentinel is detected."""
-    def __init__(self, process_stdout, target_phase_regex: str):
+    """Watches process stdout stream asynchronously with multi-phase query support."""
+    def __init__(self, process_stdout, default_phase_regex: Optional[str] = None):
         self.stdout = process_stdout
-        self.pattern = re.compile(target_phase_regex)
+        self.default_pattern = re.compile(default_phase_regex) if default_phase_regex else None
+        self.line_queue = queue.Queue()
+        
+        self.reader_thread = threading.Thread(target=self._enqueue_output, daemon=True)
+        self.reader_thread.start()
 
-    def wait_for_phase(self, timeout_seconds: float = 10.0) -> bool:
+    def _enqueue_output(self):
+        try:
+            for line in iter(self.stdout.readline, ''):
+                if not line:
+                    break
+                self.line_queue.put(line)
+        except Exception:
+            pass
+
+    def wait_for_phase(self, target_phase_regex: Optional[str] = None, timeout_seconds: float = 2.0) -> bool:
+        pattern = re.compile(target_phase_regex) if target_phase_regex else self.default_pattern
+        if not pattern:
+            raise ValueError("No target regex pattern provided.")
+            
         start_time = time.time()
         while time.time() - start_time < timeout_seconds:
-            line = self.stdout.readline()
-            if not line:
-                time.sleep(0.02)
+            try:
+                remaining_time = max(0.01, timeout_seconds - (time.time() - start_time))
+                line = self.line_queue.get(timeout=min(0.02, remaining_time))
+                if pattern.search(line):
+                    return True
+            except queue.Empty:
                 continue
-            if self.pattern.search(line):
-                return True
         return False

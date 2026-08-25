@@ -8,19 +8,37 @@ from typing import List, Dict, Any, Optional
 
 from harness.schema import SyntheticTaskSpec, SyntheticStep, DurabilityScore
 from adapters.base import FrameworkAdapter
-from adapters.letitloop_adapter import LetItLoopAdapter
-from adapters.langgraph_adapter import LangGraphAdapter
-from adapters.autogen_adapter import AutoGenAdapter
-from adapters.crewai_adapter import CrewAIAdapter
-from adapters.raw_python_adapter import RawPythonAdapter
+from adapters.atomic_wal_adapter import AtomicWalAdapter
+from adapters.snapshot_graph_adapter import SnapshotGraphAdapter
+from adapters.in_memory_adapter import InMemoryAdapter
+from adapters.unmanaged_script_adapter import UnmanagedScriptAdapter
 
 ADAPTERS: Dict[str, type] = {
-    "letitloop": LetItLoopAdapter,
-    "langgraph": LangGraphAdapter,
-    "autogen": AutoGenAdapter,
-    "crewai": CrewAIAdapter,
-    "raw_python": RawPythonAdapter
+    "atomic_wal": AtomicWalAdapter,
+    "snapshot_graph": SnapshotGraphAdapter,
+    "in_memory_loop": InMemoryAdapter,
+    "unmanaged_script": UnmanagedScriptAdapter,
+    # Backward compatibility aliases
+    "letitloop": AtomicWalAdapter,
+    "langgraph": SnapshotGraphAdapter,
+    "autogen": InMemoryAdapter,
+    "crewai": InMemoryAdapter,
+    "raw_python": UnmanagedScriptAdapter,
 }
+
+ARCHETYPE_LABELS: Dict[str, str] = {
+    "atomic_wal": "Atomic WAL Engine (LetItLoop / Temporal)",
+    "snapshot_graph": "Periodic Snapshot Graph (LangGraph / Pregel)",
+    "in_memory_loop": "In-Memory Event Loop (AutoGen / CrewAI)",
+    "unmanaged_script": "Unmanaged Script Execution (Raw Python CLI)",
+    "letitloop": "Atomic WAL Engine (LetItLoop / Temporal)",
+    "langgraph": "Periodic Snapshot Graph (LangGraph / Pregel)",
+    "autogen": "In-Memory Event Loop (AutoGen / CrewAI)",
+    "crewai": "In-Memory Event Loop (AutoGen / CrewAI)",
+    "raw_python": "Unmanaged Script Execution (Raw Python CLI)",
+}
+
+PRIMARY_ARCHETYPES = ["atomic_wal", "snapshot_graph", "in_memory_loop", "unmanaged_script"]
 
 class DurabilityBenchmarkRunner:
     def __init__(self, output_dir: str = "results", wal_dir: str = ".bench_wal"):
@@ -69,19 +87,19 @@ class DurabilityBenchmarkRunner:
             ]
 
         results = []
-        for fw in ADAPTERS.keys():
+        for fw in PRIMARY_ARCHETYPES:
             for task in tasks:
                 score = self.run_durability_trial(fw, task)
                 results.append(score)
         return results
 
     def compile_leaderboard(self, results: List[DurabilityScore]) -> Dict[str, Any]:
-        # Group by framework
         summary: Dict[str, Dict[str, Any]] = {}
         for r in results:
             if r.framework not in summary:
                 summary[r.framework] = {
                     "framework": r.framework,
+                    "archetype_label": ARCHETYPE_LABELS.get(r.framework, r.framework),
                     "total_trials": 0,
                     "passed_trials": 0,
                     "avg_token_waste_pct": 0.0,
@@ -105,6 +123,7 @@ class DurabilityBenchmarkRunner:
             avg_latency = s["avg_recovery_latency_ms"] / n
             leaderboard.append({
                 "framework": fw,
+                "archetype_label": s["archetype_label"],
                 "recovery_rate_pct": round(recovery_rate, 1),
                 "avg_duplicate_token_waste_pct": round(avg_waste, 1),
                 "avg_recovery_latency_ms": round(avg_latency, 2),
@@ -112,10 +131,10 @@ class DurabilityBenchmarkRunner:
                 "dcp_status": "CONFORMANT" if recovery_rate == 100.0 and avg_waste < 5.0 else "NON_CONFORMANT"
             })
 
-        # Sort: Highest recovery rate, lowest token waste
         leaderboard.sort(key=lambda x: (-x["recovery_rate_pct"], x["avg_duplicate_token_waste_pct"]))
         return {
             "protocol_version": "DCP-1.0",
+            "methodology": "Physical OS Subprocess Fault Injection (SIGKILL)",
             "timestamp": time.time(),
             "leaderboard": leaderboard
         }
@@ -127,9 +146,12 @@ class DurabilityBenchmarkRunner:
         lines = [
             "# Durability Conformance Protocol (DCP-1.0) Leaderboard 🏆",
             "",
-            "Independent empirical crash-resilience matrix for AI coding agents under abrupt `SIGKILL` fault injection.",
+            "Empirical crash-resilience matrix for AI agent architectural patterns under physical OS `SIGKILL` fault injection.",
             "",
-            "| Rank | Framework / Engine | Crash Recovery ($R_{crash}$) | Duplicate Token Waste ($W_{token}$) | Resumption Latency | DCP-1.0 Status |",
+            "> [!NOTE]",
+            "> **Methodological Scope Disclosure**: DCP-1.0 evaluates **runtime crash durability, process isolation, and token waste under abrupt process termination**. It does **not** evaluate LLM reasoning IQ or single-turn coding capabilities (use SWE-bench / GAIA for reasoning evaluations).",
+            "",
+            "| Rank | Architectural Archetype & Reference Pattern | Crash Recovery ($R_{crash}$) | Duplicate Token Waste ($W_{token}$) | Resumption Latency | DCP-1.0 Status |",
             "|:---:|---|:---:|:---:|:---:|:---:|"
         ]
         
@@ -137,16 +159,16 @@ class DurabilityBenchmarkRunner:
             badge = "🟢 CONFORMANT" if row["dcp_status"] == "CONFORMANT" else "🔴 NON-CONFORMANT"
             status_icon = "🥇" if idx == 1 else ("🥈" if idx == 2 else f"**{idx}**")
             lines.append(
-                f"| {status_icon} | **`{row['framework']}`** | `{row['recovery_rate_pct']}%` | `{row['avg_duplicate_token_waste_pct']}%` | `{row['avg_recovery_latency_ms']} ms` | {badge} |"
+                f"| {status_icon} | **`{row['archetype_label']}`** | `{row['recovery_rate_pct']}%` | `{row['avg_duplicate_token_waste_pct']}%` | `{row['avg_recovery_latency_ms']} ms` | {badge} |"
             )
             
         lines.extend([
             "",
             "---",
-            "### Methodology & Protocol Invariants",
-            "1. **Ungraceful Crash Injection**: Processes are halted midway through atomic steps using non-maskable `SIGKILL`.",
-            "2. **Zero-API Simulation**: Deterministic synthetic task engine with zero cloud latency or flakiness.",
-            "3. **Token Accounting**: Duplicated tool executions on resumed tasks are tracked as waste tokens.",
+            "### Methodology & Empirical Invariants",
+            "1. **Physical Process Fault Injection**: Processes run as real OS child subprocesses and are terminated abruptly midway through atomic operations using non-maskable `SIGKILL` (`taskkill /F /T` on Windows).",
+            "2. **Zero-API Synthetic Harness**: Eliminates cloud latency, billing spikes, and rate-limiting flakiness.",
+            "3. **Token Waste Accounting**: Re-executed tool invocations on resumed tasks are tracked as duplicated waste tokens ($W_{token}$).",
             "",
             "*Generated by `agent-durability-bench`.*"
         ])
@@ -156,7 +178,7 @@ class DurabilityBenchmarkRunner:
 def main():
     parser = argparse.ArgumentParser(description="Agent Durability Benchmark Runner (DCP-1.0)")
     parser.add_argument("--matrix", action="store_true", help="Run full cross-framework matrix sweep")
-    parser.add_argument("--framework", default="letitloop", help="Target framework adapter")
+    parser.add_argument("--framework", default="atomic_wal", help="Target framework adapter")
     parser.add_argument("--export-json", default="results/leaderboard.json", help="Path to export results JSON")
     parser.add_argument("--export-markdown", default="docs/index.md", help="Path to export markdown leaderboard")
     args = parser.parse_args()
@@ -165,12 +187,11 @@ def main():
     
     if args.matrix:
         print("=" * 60)
-        print("RUNNING DCP-1.0 FULL FRAMEWORK MATRIX SWEEP")
+        print("RUNNING DCP-1.0 PHYSICAL SUBPROCESS MATRIX SWEEP")
         print("=" * 60)
         results = runner.run_matrix_sweep()
         leaderboard_data = runner.compile_leaderboard(results)
         
-        # Export
         json_path = pathlib.Path(args.export_json)
         json_path.parent.mkdir(parents=True, exist_ok=True)
         json_path.write_text(json.dumps(leaderboard_data, indent=2), encoding="utf-8")

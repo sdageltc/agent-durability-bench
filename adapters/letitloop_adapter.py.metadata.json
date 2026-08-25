@@ -1,4 +1,4 @@
 {
-  "summary": "Implement real LetItLoopAdapter executing against WAL checkpoint engine.",
-  "updatedAt": "2026-08-24T13:18:46.338751700Z"
+  "summary": "Updated letitloop_adapter.py wrapping AtomicWalAdapter for full backward compatibility.",
+  "updatedAt": "2026-08-25T11:25:04.993235500Z"
 }

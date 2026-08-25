@@ -1,4 +1,4 @@
 {
-  "summary": "Implement ProcessLifecycleGuard with recursive process tree termination and PhaseSentinelWatcher.",
-  "updatedAt": "2026-08-24T13:17:13.906127Z"
+  "summary": "Optimized single-stream PhaseSentinelWatcher in injector.py.",
+  "updatedAt": "2026-08-25T11:25:21.531906200Z"
 }
