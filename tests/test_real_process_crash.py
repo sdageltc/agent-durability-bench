@@ -4,7 +4,6 @@ import time
 import json
 import os
 from pathlib import Path
-import pytest
 from harness.injector import ProcessLifecycleGuard, PhaseSentinelWatcher
 from harness.schema import SyntheticTaskSpec, SyntheticStep, DurabilityScore
 from adapters.letitloop_adapter import LetItLoopAdapter

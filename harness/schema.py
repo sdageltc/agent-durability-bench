@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Literal, Optional, List
+from typing import Literal, List
 
 class SyntheticStep(BaseModel):
     step_id: str

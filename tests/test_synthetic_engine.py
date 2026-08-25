@@ -1,6 +1,5 @@
 import tempfile
 import pathlib
-import pytest
 from harness.synthetic_engine import SyntheticTaskRunner
 from harness.schema import SyntheticTaskSpec, SyntheticStep
 

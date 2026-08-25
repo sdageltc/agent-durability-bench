@@ -1,7 +1,5 @@
 import tempfile
 import pathlib
-import json
-import pytest
 from harness.runner import DurabilityBenchmarkRunner, ADAPTERS, PRIMARY_ARCHETYPES
 from harness.schema import SyntheticTaskSpec, SyntheticStep
 
