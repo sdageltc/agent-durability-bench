@@ -61,4 +61,4 @@
 
 ## Phase 6: Unified Umbrella Landing Page & Sunset Gates — Week 6
 - [x] **Task 6.1: Redesign Umbrella Landing Page (`sdageltc.github.io/letitloop/`)**
-- [x] **Task 6.2: 6-Month Calibrated Metric Gate & Sunset Scorecard (`MILESTONES.md`)**
+- [x] **Task 6.2: Durability Metric Gate & Sunset Scorecard (`MILESTONES.md`)**
