@@ -10,7 +10,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Leaderboard](https://img.shields.io/badge/Leaderboard-Live%20on%20Pages-brightgreen.svg)](https://sdageltc.github.io/agent-durability-bench/)
 
-**[Durability Benchmark](https://github.com/sdageltc/agent-durability-bench)** • **[PR Verification Action](https://github.com/sdageltc/letitloop-action)** • **[Engine Core (v0.3.0)](https://github.com/sdageltc/letitloop)**
+**[Live Leaderboard](https://sdageltc.github.io/agent-durability-bench/)** • **[LetItLoop Engine Website](https://sdageltc.github.io/letitloop/)** • **[GitHub Action](https://github.com/sdageltc/letitloop-action)** • **[GitHub Repo](https://github.com/sdageltc/letitloop)**
 
 </div>
 
