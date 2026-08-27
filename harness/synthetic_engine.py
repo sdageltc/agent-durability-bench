@@ -3,7 +3,7 @@ import pathlib
 import time
 from typing import Any, Dict, Optional
 
-from letitloop.conformance.harness.schema import SyntheticTaskSpec
+from harness.schema import SyntheticTaskSpec
 
 
 class SyntheticTaskResult:
