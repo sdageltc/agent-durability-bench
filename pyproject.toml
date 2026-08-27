@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "agent-durability-bench"
-version = "0.1.0"
-description = "Crash-resilience, token waste, and recovery benchmark for autonomous AI coding agents (DCP-1.0)"
+version = "2.0.0"
+description = "Crash-resilience, token waste, and recovery benchmark for autonomous AI coding agents (DCP-2.0)"
 readme = "README.md"
 license = { text = "MIT" }
 requires-python = ">=3.11"
