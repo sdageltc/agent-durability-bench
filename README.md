@@ -100,9 +100,9 @@ python -m harness.runner --all --export-json results/latest.json --export-markdo
 
 Live benchmark results are updated continuously via GitHub Actions and published to [GitHub Pages](https://sdageltc.github.io/agent-durability-bench/):
 
-| Framework | DCP-1.0 Score | Resumption Success | Zero-State Corruption | Process Cleanup |
+| Framework | DCP-2.0 Score | Resumption Success | Zero-State Corruption | Process Cleanup |
 |---|:---:|:---:|:---:|:---:|
-| **LetItLoop v0.2.0** | **100%** | ✅ Pass (WAL Resume) | ✅ Pass (AST Splicer) | ✅ Pass (Job Object) |
+| **LetItLoop v0.5.0** | **100%** | ✅ Pass (WAL Resume) | ✅ Pass (AST Splicer) | ✅ Pass (Job Object) |
 | *LangGraph (Community)* | *Pending* | - | - | - |
 | *AutoGen (Community)* | *Pending* | - | - | - |
 | *CrewAI (Community)* | *Pending* | - | - | - |
