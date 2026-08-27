@@ -320,38 +320,28 @@ class DurabilityBenchmarkRunner:
         p = pathlib.Path(target_path)
         p.parent.mkdir(parents=True, exist_ok=True)
 
+        proto = leaderboard_data.get("protocol_version", "DCP-2.0")
         lines = [
-            "# Durability Conformance Protocol (DCP-1.0) Leaderboard 🏆",
+            f"# Durability Conformance Protocol ({proto}) Leaderboard 🏆",
             "",
             "Empirical crash-resilience matrix for AI agent architectural patterns under physical OS `SIGKILL` fault injection.",
             "",
             "> [!NOTE]",
-            "> **Methodological Scope Disclosure**: DCP-1.0 evaluates **runtime crash durability, process isolation, and token waste under abrupt process termination**. It does **not** evaluate LLM reasoning IQ or single-turn coding capabilities (use SWE-bench / GAIA for reasoning evaluations).",
+            f"> **Methodological Scope Disclosure**: {proto} evaluates **runtime crash durability, process isolation, and token waste under abrupt process termination**. It does **not** evaluate LLM reasoning IQ or single-turn coding capabilities (use SWE-bench / GAIA for reasoning evaluations).",
             "",
-            "| Rank | Architectural Archetype & Reference Pattern | Crash Recovery ($R_{crash}$) | Duplicate Token Waste ($W_{token}$) | Resumption Latency | DCP-1.0 Status |",
+            f"| Rank | Architectural Archetype & Reference Pattern | Crash Recovery ($R_{{crash}}$) | Duplicate Token Waste ($W_{{token}}$) | Resumption Latency | {proto} Status |",
             "|:---:|---|:---:|:---:|:---:|:---:|",
         ]
 
-        # DCP-2.0 vs DCP-1.0 compatibility
-        is_dcp2 = leaderboard_data.get("protocol_version", "").startswith("DCP-2")
         for idx, row in enumerate(leaderboard_data["leaderboard"], 1):
-            if is_dcp2:
-                # DCP-2.0 receipt fields: avg_T_resume_ms, avg_W_token_pct, total_C_fail, recovery_rate_pct
-                badge = (
-                    "🟢 CONFORMANT"
-                    if row.get("recovery_rate_pct", 0) == 100.0 and row.get("avg_W_token_pct", 100) < 5.0
-                    else "🔴 NON-CONFORMANT"
-                )
-                status_icon = "🥇" if idx == 1 else ("🥈" if idx == 2 else f"**{idx}**")
-                lines.append(
-                    f"| {status_icon} | **`{row['archetype_label']}`** | `{row.get('recovery_rate_pct', 0)}%` | `{row.get('avg_W_token_pct', 0)}%` | `{row.get('avg_T_resume_ms', 0)} ms` | {badge} |"
-                )
-            else:
-                badge = "🟢 CONFORMANT" if row["dcp_status"] == "CONFORMANT" else "🔴 NON-CONFORMANT"
-                status_icon = "🥇" if idx == 1 else ("🥈" if idx == 2 else f"**{idx}**")
-                lines.append(
-                    f"| {status_icon} | **`{row['archetype_label']}`** | `{row['recovery_rate_pct']}%` | `{row['avg_duplicate_token_waste_pct']}%` | `{row['avg_recovery_latency_ms']} ms` | {badge} |"
-                )
+            recovery_rate = row.get("recovery_rate_pct", 0.0)
+            waste_pct = row.get("avg_duplicate_token_waste_pct", row.get("avg_W_token_pct", 0.0))
+            latency_ms = row.get("avg_recovery_latency_ms", row.get("avg_T_resume_ms", 0.0))
+            badge = "🟢 CONFORMANT" if (row.get("dcp_status") == "CONFORMANT" or (recovery_rate == 100.0 and waste_pct < 5.0)) else "🔴 NON-CONFORMANT"
+            status_icon = "🥇" if idx == 1 else ("🥈" if idx == 2 else f"**{idx}**")
+            lines.append(
+                f"| {status_icon} | **`{row['archetype_label']}`** | `{recovery_rate}%` | `{waste_pct}%` | `{latency_ms} ms` | {badge} |"
+            )
 
         lines.extend(
             [

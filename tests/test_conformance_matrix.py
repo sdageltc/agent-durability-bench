@@ -28,7 +28,7 @@ def test_durability_matrix_sweep_math():
         assert len(results) == len(PRIMARY_ARCHETYPES)
         
         leaderboard_data = runner.compile_leaderboard(results)
-        assert leaderboard_data["protocol_version"] == "DCP-1.0"
+        assert leaderboard_data["protocol_version"] == "DCP-2.0"
         assert "methodology" in leaderboard_data
         
         # atomic_wal must be rank 1 with 100% recovery and 0% waste
@@ -48,7 +48,7 @@ def test_export_markdown_leaderboard():
         runner.export_markdown_leaderboard(leaderboard_data, md_path)
         
         content = pathlib.Path(md_path).read_text(encoding="utf-8")
-        assert "Durability Conformance Protocol (DCP-1.0) Leaderboard" in content
+        assert "Durability Conformance Protocol (DCP-2.0) Leaderboard" in content
         assert "Atomic WAL Engine" in content
         assert "Methodological Scope Disclosure" in content
         assert "🟢 CONFORMANT" in content
