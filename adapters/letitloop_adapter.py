@@ -1,4 +1,4 @@
-from letitloop.conformance.adapters.atomic_wal_adapter import AtomicWalAdapter
+from adapters.atomic_wal_adapter import AtomicWalAdapter
 
 
 class LetItLoopAdapter(AtomicWalAdapter):

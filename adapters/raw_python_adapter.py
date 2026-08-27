@@ -1,7 +1,7 @@
 from typing import Any, Tuple
 
-from letitloop.conformance.adapters.base import FrameworkAdapter
-from letitloop.conformance.harness.schema import DurabilityScore, SyntheticTaskSpec
+from adapters.base import FrameworkAdapter
+from harness.schema import DurabilityScore, SyntheticTaskSpec
 
 
 class RawPythonAdapter(FrameworkAdapter):

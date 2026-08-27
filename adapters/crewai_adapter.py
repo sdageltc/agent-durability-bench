@@ -1,8 +1,8 @@
 from typing import Any, Tuple
 
-from letitloop.conformance.adapters._durable_mixin import is_host_available, wrap_with_durable, wrap_with_durable_async
-from letitloop.conformance.adapters.base import FrameworkAdapter
-from letitloop.conformance.harness.schema import DurabilityScore, SyntheticTaskSpec
+from adapters._durable_mixin import is_host_available, wrap_with_durable, wrap_with_durable_async
+from adapters.base import FrameworkAdapter
+from harness.schema import DurabilityScore, SyntheticTaskSpec
 
 
 class CrewAIAdapter(FrameworkAdapter):

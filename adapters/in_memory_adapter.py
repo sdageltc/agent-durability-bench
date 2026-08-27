@@ -6,9 +6,9 @@ import time
 from pathlib import Path
 from typing import Any, Tuple
 
-from letitloop.conformance.adapters.base import FrameworkAdapter
-from letitloop.conformance.harness.injector import PhaseSentinelWatcher, ProcessLifecycleGuard
-from letitloop.conformance.harness.schema import DurabilityScore, SyntheticTaskSpec
+from adapters.base import FrameworkAdapter
+from harness.injector import PhaseSentinelWatcher, ProcessLifecycleGuard
+from harness.schema import DurabilityScore, SyntheticTaskSpec
 
 
 class InMemoryAdapter(FrameworkAdapter):
@@ -30,7 +30,7 @@ import sys
 import os
 import time
 import json
-from letitloop.conformance.harness.schema import SyntheticTaskSpec
+from harness.schema import SyntheticTaskSpec
 
 spec = SyntheticTaskSpec.model_validate_json({json.dumps(spec.model_dump_json())})
 in_memory_history = []

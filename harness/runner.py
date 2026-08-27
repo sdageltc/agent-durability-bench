@@ -8,12 +8,12 @@ import secrets
 import time
 from typing import Any, Dict, List, Optional
 
-from letitloop.conformance.adapters.atomic_wal_adapter import AtomicWalAdapter
-from letitloop.conformance.adapters.base import FrameworkAdapter
-from letitloop.conformance.adapters.in_memory_adapter import InMemoryAdapter
-from letitloop.conformance.adapters.snapshot_graph_adapter import SnapshotGraphAdapter
-from letitloop.conformance.adapters.unmanaged_script_adapter import UnmanagedScriptAdapter
-from letitloop.conformance.harness.schema import DurabilityScore, SyntheticStep, SyntheticTaskSpec
+from adapters.atomic_wal_adapter import AtomicWalAdapter
+from adapters.base import FrameworkAdapter
+from adapters.in_memory_adapter import InMemoryAdapter
+from adapters.snapshot_graph_adapter import SnapshotGraphAdapter
+from adapters.unmanaged_script_adapter import UnmanagedScriptAdapter
+from harness.schema import DurabilityScore, SyntheticStep, SyntheticTaskSpec
 
 ADAPTERS: Dict[str, type] = {
     "atomic_wal": AtomicWalAdapter,

@@ -7,10 +7,10 @@ import time
 from pathlib import Path
 from typing import Any, Tuple
 
-from letitloop.conformance.adapters.base import FrameworkAdapter
-from letitloop.conformance.harness.injector import PhaseSentinelWatcher, ProcessLifecycleGuard
-from letitloop.conformance.harness.schema import DurabilityScore, SyntheticTaskSpec
-from letitloop.conformance.harness.synthetic_engine import SyntheticTaskRunner
+from adapters.base import FrameworkAdapter
+from harness.injector import PhaseSentinelWatcher, ProcessLifecycleGuard
+from harness.schema import DurabilityScore, SyntheticTaskSpec
+from harness.synthetic_engine import SyntheticTaskRunner
 
 
 class AtomicWalAdapter(FrameworkAdapter):
@@ -34,8 +34,8 @@ class AtomicWalAdapter(FrameworkAdapter):
 import sys
 import os
 import json
-from letitloop.conformance.harness.schema import SyntheticTaskSpec
-from letitloop.conformance.harness.synthetic_engine import SyntheticTaskRunner
+from harness.schema import SyntheticTaskSpec
+from harness.synthetic_engine import SyntheticTaskRunner
 
 spec = SyntheticTaskSpec.model_validate_json({json.dumps(spec.model_dump_json())})
 runner = SyntheticTaskRunner(spec, wal_dir=r"{self.wal_dir}")
