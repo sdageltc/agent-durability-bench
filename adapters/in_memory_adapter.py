@@ -1,13 +1,15 @@
+import json
 import os
+import subprocess
 import sys
 import time
-import json
-import subprocess
 from pathlib import Path
-from typing import Tuple, Any
-from adapters.base import FrameworkAdapter
-from harness.schema import DurabilityScore, SyntheticTaskSpec
-from harness.injector import ProcessLifecycleGuard, PhaseSentinelWatcher
+from typing import Any, Tuple
+
+from letitloop.conformance.adapters.base import FrameworkAdapter
+from letitloop.conformance.harness.injector import PhaseSentinelWatcher, ProcessLifecycleGuard
+from letitloop.conformance.harness.schema import DurabilityScore, SyntheticTaskSpec
+
 
 class InMemoryAdapter(FrameworkAdapter):
     def __init__(self, wal_dir: str = ".bench_wal"):
@@ -23,12 +25,12 @@ class InMemoryAdapter(FrameworkAdapter):
         return "In-Memory Event Loop (AutoGen / CrewAI)"
 
     def start_task(self, spec: SyntheticTaskSpec) -> Tuple[int, Any]:
-        child_code = f'''
+        child_code = f"""
 import sys
 import os
 import time
 import json
-from harness.schema import SyntheticTaskSpec
+from letitloop.conformance.harness.schema import SyntheticTaskSpec
 
 spec = SyntheticTaskSpec.model_validate_json({json.dumps(spec.model_dump_json())})
 in_memory_history = []
@@ -40,10 +42,10 @@ for idx, step in enumerate(spec.steps):
         time.sleep(1.0)
     in_memory_history.append(step.step_id)
     time.sleep(0.01)
-'''
+"""
         env = os.environ.copy()
         env["PYTHONUNBUFFERED"] = "1"
-        env["PYTHONPATH"] = str(Path(__file__).parent.parent)
+        env["PYTHONPATH"] = str(Path(__file__).resolve().parents[3])
 
         proc = subprocess.Popen(
             [sys.executable, "-c", child_code],
@@ -51,20 +53,20 @@ for idx, step in enumerate(spec.steps):
             stderr=subprocess.PIPE,
             text=True,
             bufsize=1,
-            env=env
+            env=env,
         )
         self.active_process = proc
-        
+
         watcher = PhaseSentinelWatcher(proc.stdout)
         watcher.wait_for_phase(r"\[PHASE_READY\]", timeout_seconds=2.0)
-        
+
         if spec.kill_at_step_index >= 0:
             watcher.wait_for_phase(r"\[KILL_POINT_REACHED", timeout_seconds=2.0)
             time.sleep(0.01)
-            
+
             guard = ProcessLifecycleGuard(proc.pid)
             guard.inject_kill(spec.kill_signal)
-            
+
         return proc.pid, proc.stdout
 
     def resume_task(self, spec: SyntheticTaskSpec) -> DurabilityScore:
@@ -76,5 +78,5 @@ for idx, step in enumerate(spec.steps):
             state_corruption_detected=True,
             impossibility_artifact_emitted=False,
             recovery_latency_seconds=0.0,
-            final_verdict="FAIL_DATA_LOSS"
+            final_verdict="FAIL_DATA_LOSS",
         )
