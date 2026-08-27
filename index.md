@@ -1,13 +1,13 @@
-# Durability Conformance Protocol (DCP-1.0) Leaderboard 🏆
+# Durability Conformance Protocol (DCP-2.0) Leaderboard 🏆
 
 Empirical crash-resilience matrix for AI agent architectural patterns under physical OS `SIGKILL` fault injection.
 
 > [!NOTE]
-> **Methodological Scope Disclosure**: DCP-1.0 evaluates **runtime crash durability, process isolation, and token waste under abrupt process termination**. It does **not** evaluate LLM reasoning IQ or single-turn coding capabilities (use SWE-bench / GAIA for reasoning evaluations).
+> **Methodological Scope Disclosure**: DCP-2.0 evaluates **runtime crash durability, process isolation, and token waste under abrupt process termination**. It does **not** evaluate LLM reasoning IQ or single-turn coding capabilities (use SWE-bench / GAIA for reasoning evaluations).
 
-| Rank | Architectural Archetype & Reference Pattern | Crash Recovery ($R_{crash}$) | Duplicate Token Waste ($W_{token}$) | Resumption Latency | DCP-1.0 Status |
+| Rank | Architectural Archetype & Reference Pattern | Crash Recovery ($R_{crash}$) | Duplicate Token Waste ($W_{token}$) | Resumption Latency | DCP-2.0 Status |
 |:---:|---|:---:|:---:|:---:|:---:|
-| 🥇 | **`Atomic WAL Engine (LetItLoop / Temporal)`** | `100.0%` | `0.0%` | `1.01 ms` | 🟢 CONFORMANT |
+| 🥇 | **`Atomic WAL Engine (LetItLoop v0.5.0 / Temporal)`** | `100.0%` | `0.0%` | `1.01 ms` | 🟢 CONFORMANT |
 | 🥈 | **`Periodic Snapshot Graph (LangGraph / Pregel)`** | `100.0%` | `14.5%` | `50.76 ms` | 🔴 NON-CONFORMANT |
 | **3** | **`In-Memory Event Loop (AutoGen / CrewAI)`** | `0.0%` | `100.0%` | `0.0 ms` | 🔴 NON-CONFORMANT |
 | **4** | **`Unmanaged Script Execution (Raw Python CLI)`** | `0.0%` | `100.0%` | `0.0 ms` | 🔴 NON-CONFORMANT |
