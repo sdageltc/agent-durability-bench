@@ -1,8 +1,10 @@
-import time
 import json
 import pathlib
-from typing import Dict, Any, Optional
+import time
+from typing import Any, Dict, Optional
+
 from harness.schema import SyntheticTaskSpec
+
 
 class SyntheticTaskResult:
     def __init__(self, completed: bool, steps_executed: int, total_tokens: int, checkpoint_state: Dict[str, Any]):
@@ -10,6 +12,7 @@ class SyntheticTaskResult:
         self.steps_executed = steps_executed
         self.total_tokens = total_tokens
         self.checkpoint_state = checkpoint_state
+
 
 class SyntheticTaskRunner:
     def __init__(self, spec: SyntheticTaskSpec, wal_dir: Optional[str] = None):
@@ -50,6 +53,11 @@ class SyntheticTaskRunner:
                 print(f"[KILL_POINT_REACHED:{idx}:{step.step_id}]", flush=True)
                 time.sleep(1.0)
 
+            # Security: sandbox target_path — reject directory traversal (P1-1 hardening)
+            if ".." in pathlib.PurePath(step.target_path).parts:
+                raise ValueError(f"sandbox violation: target_path {step.target_path!r} contains '..'")
+            if pathlib.Path(step.target_path).is_absolute() and ".." in str(step.target_path):
+                raise ValueError(f"sandbox violation: absolute target_path {step.target_path!r}")
             # Execute the deterministic synthetic operation
             if step.action_type == "FILE_WRITE":
                 p = pathlib.Path(step.target_path)
@@ -67,7 +75,7 @@ class SyntheticTaskRunner:
                 "action_type": step.action_type,
                 "status": "COMPLETED",
                 "timestamp": time.time(),
-                "simulated_tokens": step.simulated_token_cost
+                "simulated_tokens": step.simulated_token_cost,
             }
             with open(self.wal_file, "a", encoding="utf-8") as f:
                 f.write(json.dumps(wal_record) + "\n")
@@ -81,5 +89,5 @@ class SyntheticTaskRunner:
             completed=True,
             steps_executed=len(self.spec.steps),
             total_tokens=tokens_spent,
-            checkpoint_state={"wal_path": str(self.wal_file)}
+            checkpoint_state={"wal_path": str(self.wal_file)},
         )
