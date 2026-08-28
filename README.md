@@ -14,6 +14,10 @@
 
 </div>
 
+<p align="center">
+  <img src="docs/assets/crash_recovery_demo.gif" alt="Agent Durability Bench SIGKILL & Crash Recovery Demo" width="100%">
+</p>
+
 ---
 
 ## The Core Question
