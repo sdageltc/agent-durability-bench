@@ -4,6 +4,7 @@
 
 **The Open Crash-Resilience & Durability Benchmark for Autonomous AI Coding Agents**
 
+[![Official Website](https://img.shields.io/badge/Website-LetItLoop-0284c7?logo=googlechrome&logoColor=white)](https://sdageltc.github.io/letitloop/)
 [![CI](https://github.com/sdageltc/agent-durability-bench/actions/workflows/ci.yml/badge.svg)](https://github.com/sdageltc/agent-durability-bench/actions/workflows/ci.yml)
 [![Benchmark](https://img.shields.io/badge/Benchmark-DCP--2.0-blue.svg)](https://github.com/sdageltc/agent-durability-bench)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%20%7C%203.12-blue.svg)](https://www.python.org/)
