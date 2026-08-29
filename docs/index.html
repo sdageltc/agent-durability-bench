@@ -547,11 +547,11 @@
       </div>
       <div class="metric-cell">
         <div class="metric-num">98.6%</div>
-        <div class="metric-lbl">Crash Recovery ($R_{crash}$)</div>
+        <div class="metric-lbl">Crash Recovery (R<sub>crash</sub>)</div>
       </div>
       <div class="metric-cell">
         <div class="metric-num">14.2 ms</div>
-        <div class="metric-lbl">Hydration & Resume</div>
+        <div class="metric-lbl">Hydration &amp; Resume</div>
       </div>
       <div class="metric-cell">
         <div class="metric-num">2.8%</div>
@@ -568,7 +568,7 @@
             <div style="width: 10px; height: 10px; border-radius: 50%; background: #f59e0b;"></div>
             <div style="width: 10px; height: 10px; border-radius: 50%; background: #10b981;"></div>
           </div>
-          <div style="font-family: var(--mono); font-size: 0.78rem; color: var(--text-64);">bash — lil bench --self (DCP-2.0 SIGKILL Injector & Fault Recovery)</div>
+          <div style="font-family: var(--mono); font-size: 0.78rem; color: var(--text-64);">bash — lil bench --self (DCP-2.0 SIGKILL Injector &amp; Fault Recovery)</div>
           <div style="width: 32px;"></div>
         </div>
         <div style="display: flex; justify-content: center; background: #000;">
@@ -589,11 +589,11 @@
       <table>
         <thead>
           <tr>
-            <th>Agent Runtime & Reference Architecture</th>
+            <th>Agent Runtime &amp; Reference Architecture</th>
             <th>Durability Mechanism</th>
-            <th>Crash Recovery ($R_{crash}$)</th>
-            <th>Resumption Latency ($T_{resume}$)</th>
-            <th>Duplicate Token Waste ($W_{token}$)</th>
+            <th>Crash Recovery (R<sub>crash</sub>)</th>
+            <th>Resumption Latency (T<sub>resume</sub>)</th>
+            <th>Duplicate Token Waste (W<sub>token</sub>)</th>
             <th>Per-Step Write Overhead</th>
             <th>Proof / Audit Trail</th>
           </tr>
@@ -660,11 +660,11 @@
     <!-- Trade-offs & Scientific Disclosure -->
     <div class="pad" style="padding-top: 24px; padding-bottom: 24px;">
       <div style="background: rgba(13, 18, 31, 0.6); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px 22px; font-size: 0.88rem; color: var(--text-64); line-height: 1.6;">
-        <strong style="color: #ffffff; display: block; margin-bottom: 6px;">⚖️ Methodological Scope & Trade-off Disclosures:</strong>
+        <strong style="color: #ffffff; display: block; margin-bottom: 6px;">⚖️ Methodological Scope &amp; Trade-off Disclosures:</strong>
         <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 6px;">
           <li><strong>Why 100% durability is physically impossible:</strong> If a non-maskable SIGKILL strikes precisely during an in-flight, non-idempotent external HTTP/LLM API request before the response is committed to disk, that specific step must be reconciled upon resume, producing ~1.4%–2.8% token re-execution overhead.</li>
-          <li><strong>The Persistence Overhead Trade-off:</strong> LetItLoop's single-file WAL adds ~3.8ms disk fsync latency per step. For sub-millisecond CPU loops, persistence is unnecessary overhead; for multi-step LLM and tool pipelines costing $0.10–$2.00 per step, paying 3.8ms disk I/O to guarantee zero lost progress under process termination is an overwhelming net win.</li>
-          <li><strong>Reproduce Locally:</strong> Run <code>pip install agent-durability-bench && python -m harness.runner --full-matrix</code> to execute the physical OS subprocess fault injector on your own hardware.</li>
+          <li><strong>The Persistence Overhead Trade-off:</strong> LetItLoop's single-file WAL adds ~3.8ms disk fsync latency per step. For sub-millisecond CPU loops, persistence is unnecessary overhead; for multi-step LLM and tool pipelines costing $0.10 to $2.00 per step, paying 3.8ms disk I/O to guarantee zero lost progress under process termination is an overwhelming net win.</li>
+          <li><strong>Reproduce Locally:</strong> Run <code>pip install agent-durability-bench &amp;&amp; python -m harness.runner --full-matrix</code> to execute the physical OS subprocess fault injector on your own hardware.</li>
         </ul>
       </div>
     </div>

@@ -48,7 +48,7 @@ def generate_markdown_leaderboard(results_json_path: str, output_markdown_path: 
 
     content = f"""# 🏆 Agent Durability Benchmark Leaderboard
 
-*Conforming to the [arXiv:2608.03836 Resume Contract](https://arxiv.org/abs/2608.03836) Specification*
+*Conforming to the DCP-2.0 Process Durability & Resume Contract Specification*
 
 Testing autonomous agent crash-resilience across `SIGKILL`, OOM, and process failure scenarios.
 
