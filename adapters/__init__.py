@@ -8,6 +8,7 @@ from adapters.letitloop_adapter import LetItLoopAdapter
 from adapters.raw_python_adapter import RawPythonAdapter
 from adapters.smolagents_adapter import SmolagentsAdapter
 from adapters.snapshot_graph_adapter import SnapshotGraphAdapter
+from adapters.swarm_adapter import SwarmAdapter
 from adapters.unmanaged_script_adapter import UnmanagedScriptAdapter
 
 __all__ = [
@@ -22,4 +23,5 @@ __all__ = [
     "UnmanagedScriptAdapter",
     "RawPythonAdapter",
     "SmolagentsAdapter",
+    "SwarmAdapter",
 ]

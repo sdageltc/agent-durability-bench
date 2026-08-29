@@ -12,6 +12,34 @@ def test_all_archetypes_registered():
     assert "snapshot_graph" in ADAPTERS
     assert "in_memory_loop" in ADAPTERS
     assert "unmanaged_script" in ADAPTERS
+    assert "swarm" in ADAPTERS
+
+
+def test_swarm_adapter_reports_in_memory_crash_loss():
+    with tempfile.TemporaryDirectory() as tmpdir:
+        runner = DurabilityBenchmarkRunner(output_dir=tmpdir, wal_dir=f"{tmpdir}/wal")
+
+        task = SyntheticTaskSpec(
+            task_id="test-swarm-task",
+            steps=[
+                SyntheticStep(
+                    step_id="handoff",
+                    action_type="FILE_WRITE",
+                    target_path=f"{tmpdir}/handoff.txt",
+                    expected_content="handoff",
+                    simulated_token_cost=100,
+                )
+            ],
+            kill_at_step_index=0,
+        )
+
+        score = runner.run_durability_trial("swarm", task)
+
+        assert score.framework == "swarm"
+        assert score.resumed_successfully is False
+        assert score.duplicate_token_waste_pct == 100.0
+        assert score.state_corruption_detected is True
+        assert score.final_verdict == "FAIL_DATA_LOSS"
 
 
 def test_durability_matrix_sweep_math():
