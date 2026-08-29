@@ -7,10 +7,11 @@ import time
 from pathlib import Path
 from typing import Any, Tuple
 
-from adapters.base import FrameworkAdapter
 from harness.injector import PhaseSentinelWatcher, ProcessLifecycleGuard
 from harness.schema import DurabilityScore, SyntheticTaskSpec
 from harness.synthetic_engine import SyntheticTaskRunner
+
+from adapters.base import FrameworkAdapter
 
 
 class AtomicWalAdapter(FrameworkAdapter):

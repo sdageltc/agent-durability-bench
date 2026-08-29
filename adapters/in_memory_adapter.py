@@ -6,9 +6,10 @@ import time
 from pathlib import Path
 from typing import Any, Tuple
 
-from adapters.base import FrameworkAdapter
 from harness.injector import PhaseSentinelWatcher, ProcessLifecycleGuard
 from harness.schema import DurabilityScore, SyntheticTaskSpec
+
+from adapters.base import FrameworkAdapter
 
 
 class InMemoryAdapter(FrameworkAdapter):

@@ -1,32 +1,59 @@
+import json
+import os
 import subprocess
 import sys
 import time
-import json
-import os
 from pathlib import Path
-from harness.injector import ProcessLifecycleGuard, PhaseSentinelWatcher
-from harness.schema import SyntheticTaskSpec, SyntheticStep, DurabilityScore
+
 from adapters.letitloop_adapter import LetItLoopAdapter
+from harness.injector import PhaseSentinelWatcher, ProcessLifecycleGuard
+from harness.schema import DurabilityScore, SyntheticStep, SyntheticTaskSpec
+
 
 def test_real_subprocess_crash_and_wal_recovery(tmp_path):
     wal_dir = tmp_path / "wal_test"
     wal_dir.mkdir(parents=True, exist_ok=True)
-    
+
     spec = SyntheticTaskSpec(
         task_id="bench-crash-test-001",
         steps=[
-            SyntheticStep(step_id="step_1", action_type="FILE_WRITE", target_path=str(tmp_path / "f1.txt"), expected_content="stage_1", simulated_token_cost=100),
-            SyntheticStep(step_id="step_2", action_type="FILE_WRITE", target_path=str(tmp_path / "f2.txt"), expected_content="stage_2", simulated_token_cost=150),
-            SyntheticStep(step_id="step_3", action_type="FILE_WRITE", target_path=str(tmp_path / "f3.txt"), expected_content="stage_3", simulated_token_cost=200),
-            SyntheticStep(step_id="step_4", action_type="FILE_WRITE", target_path=str(tmp_path / "f4.txt"), expected_content="stage_4", simulated_token_cost=250),
+            SyntheticStep(
+                step_id="step_1",
+                action_type="FILE_WRITE",
+                target_path=str(tmp_path / "f1.txt"),
+                expected_content="stage_1",
+                simulated_token_cost=100,
+            ),
+            SyntheticStep(
+                step_id="step_2",
+                action_type="FILE_WRITE",
+                target_path=str(tmp_path / "f2.txt"),
+                expected_content="stage_2",
+                simulated_token_cost=150,
+            ),
+            SyntheticStep(
+                step_id="step_3",
+                action_type="FILE_WRITE",
+                target_path=str(tmp_path / "f3.txt"),
+                expected_content="stage_3",
+                simulated_token_cost=200,
+            ),
+            SyntheticStep(
+                step_id="step_4",
+                action_type="FILE_WRITE",
+                target_path=str(tmp_path / "f4.txt"),
+                expected_content="stage_4",
+                simulated_token_cost=250,
+            ),
         ],
-        kill_at_step_index=2, # Kill at step 2
-        kill_signal="SIGKILL"
+        kill_at_step_index=2,  # Kill at step 2
+        kill_signal="SIGKILL",
     )
 
     # Subprocess script to execute steps and output phase sentinels
     child_script = tmp_path / "child_runner.py"
-    child_script.write_text(f'''
+    child_script.write_text(
+        f'''
 import sys
 import time
 from harness.schema import SyntheticTaskSpec
@@ -39,7 +66,9 @@ print("[PHASE_READY]", flush=True)
 # Run until target kill step
 runner.run_until_kill_or_complete()
 print("[PHASE_DONE]", flush=True)
-''', encoding="utf-8")
+''',
+        encoding="utf-8",
+    )
 
     # 1. Spawn live subprocess with unbuffered output
     env = os.environ.copy()
@@ -52,7 +81,7 @@ print("[PHASE_DONE]", flush=True)
         stderr=subprocess.PIPE,
         text=True,
         bufsize=1,
-        env=env
+        env=env,
     )
 
     watcher = PhaseSentinelWatcher(proc.stdout, r"\[PHASE_READY\]")
@@ -70,7 +99,7 @@ print("[PHASE_DONE]", flush=True)
     # 3. Verify WAL state was committed up to step 2
     wal_file = wal_dir / f"{spec.task_id}.jsonl"
     assert wal_file.exists(), f"WAL file {wal_file} was not written."
-    
+
     wal_lines = [json.loads(line) for line in wal_file.read_text(encoding="utf-8").strip().splitlines()]
     assert len(wal_lines) == 2, f"Expected 2 completed WAL steps, got {len(wal_lines)}"
 
@@ -82,7 +111,7 @@ print("[PHASE_DONE]", flush=True)
     assert score.duplicate_token_waste_pct == 0.0
     assert score.state_corruption_detected is False
     assert score.final_verdict == "PASS"
-    
+
     # Assert remaining files created
     assert (tmp_path / "f1.txt").exists()
     assert (tmp_path / "f2.txt").exists()

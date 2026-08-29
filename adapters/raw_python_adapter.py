@@ -1,7 +1,8 @@
 from typing import Any, Tuple
 
-from adapters.base import FrameworkAdapter
 from harness.schema import DurabilityScore, SyntheticTaskSpec
+
+from adapters.base import FrameworkAdapter
 
 
 class RawPythonAdapter(FrameworkAdapter):

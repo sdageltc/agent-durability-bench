@@ -11,8 +11,10 @@ from typing import Any, Dict, List, Optional
 from adapters.atomic_wal_adapter import AtomicWalAdapter
 from adapters.base import FrameworkAdapter
 from adapters.in_memory_adapter import InMemoryAdapter
+from adapters.smolagents_adapter import SmolagentsAdapter
 from adapters.snapshot_graph_adapter import SnapshotGraphAdapter
 from adapters.unmanaged_script_adapter import UnmanagedScriptAdapter
+
 from harness.schema import DurabilityScore, SyntheticStep, SyntheticTaskSpec
 
 ADAPTERS: Dict[str, type] = {
@@ -20,6 +22,7 @@ ADAPTERS: Dict[str, type] = {
     "snapshot_graph": SnapshotGraphAdapter,
     "in_memory_loop": InMemoryAdapter,
     "unmanaged_script": UnmanagedScriptAdapter,
+    "smolagents": SmolagentsAdapter,
     # Backward compatibility aliases
     "letitloop": AtomicWalAdapter,
     "langgraph": SnapshotGraphAdapter,
@@ -33,6 +36,7 @@ ARCHETYPE_LABELS: Dict[str, str] = {
     "snapshot_graph": "Periodic Snapshot Graph (LangGraph / Pregel)",
     "in_memory_loop": "In-Memory Event Loop (AutoGen / CrewAI)",
     "unmanaged_script": "Unmanaged Script Execution (Raw Python CLI)",
+    "smolagents": "Code-Execution Agent Loop (Hugging Face smolagents)",
     "letitloop": "Atomic WAL Engine (LetItLoop / Temporal)",
     "langgraph": "Periodic Snapshot Graph (LangGraph / Pregel)",
     "autogen": "In-Memory Event Loop (AutoGen / CrewAI)",
@@ -337,7 +341,11 @@ class DurabilityBenchmarkRunner:
             recovery_rate = row.get("recovery_rate_pct", 0.0)
             waste_pct = row.get("avg_duplicate_token_waste_pct", row.get("avg_W_token_pct", 0.0))
             latency_ms = row.get("avg_recovery_latency_ms", row.get("avg_T_resume_ms", 0.0))
-            badge = "🟢 CONFORMANT" if (row.get("dcp_status") == "CONFORMANT" or (recovery_rate == 100.0 and waste_pct < 5.0)) else "🔴 NON-CONFORMANT"
+            badge = (
+                "🟢 CONFORMANT"
+                if (row.get("dcp_status") == "CONFORMANT" or (recovery_rate == 100.0 and waste_pct < 5.0))
+                else "🔴 NON-CONFORMANT"
+            )
             status_icon = "🥇" if idx == 1 else ("🥈" if idx == 2 else f"**{idx}**")
             lines.append(
                 f"| {status_icon} | **`{row['archetype_label']}`** | `{recovery_rate}%` | `{waste_pct}%` | `{latency_ms} ms` | {badge} |"

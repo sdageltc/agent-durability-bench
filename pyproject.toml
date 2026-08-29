@@ -62,6 +62,7 @@ exclude = ["tests*", "results*", ".bench_wal*"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+pythonpath = ["."]
 
 [tool.ruff]
 line-length = 120
