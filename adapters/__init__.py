@@ -6,6 +6,7 @@ from adapters.in_memory_adapter import InMemoryAdapter
 from adapters.langgraph_adapter import LangGraphAdapter
 from adapters.letitloop_adapter import LetItLoopAdapter
 from adapters.raw_python_adapter import RawPythonAdapter
+from adapters.smolagents_adapter import SmolagentsAdapter
 from adapters.snapshot_graph_adapter import SnapshotGraphAdapter
 from adapters.unmanaged_script_adapter import UnmanagedScriptAdapter
 
@@ -20,4 +21,5 @@ __all__ = [
     "CrewAIAdapter",
     "UnmanagedScriptAdapter",
     "RawPythonAdapter",
+    "SmolagentsAdapter",
 ]
