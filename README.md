@@ -151,6 +151,26 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete adapter tutorial and con
 
 ---
 
+
+
+## 👥 Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/sdageltc"><img src="https://avatars.githubusercontent.com/u/268154463?v=4" width="100px;" alt="sdageltc"/><br /><sub><b>sdageltc</b></sub></a><br /><a href="#code-sdageltc" title="Code">💻</a> <a href="#doc-sdageltc" title="Documentation">📖</a> <a href="#maintenance-sdageltc" title="Maintenance">🚧</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
 ## License
 
 MIT License. Copyright (c) 2026 sdageltc.

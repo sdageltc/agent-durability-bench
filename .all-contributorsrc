@@ -1,0 +1,26 @@
+{
+  "projectName": "agent-durability-bench",
+  "projectOwner": "sdageltc",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "sdageltc",
+      "name": "sdageltc",
+      "avatar_url": "https://avatars.githubusercontent.com/u/268154463?v=4",
+      "profile": "https://github.com/sdageltc",
+      "contributions": [
+        "code",
+        "doc",
+        "maintenance"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "linkToUsage": true
+}
