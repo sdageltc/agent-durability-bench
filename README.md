@@ -162,6 +162,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the complete adapter tutorial and con
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/sdageltc"><img src="https://avatars.githubusercontent.com/u/268154463?v=4" width="100px;" alt="sdageltc"/><br /><sub><b>sdageltc</b></sub></a><br /><a href="#code-sdageltc" title="Code">💻</a> <a href="#doc-sdageltc" title="Documentation">📖</a> <a href="#maintenance-sdageltc" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kkkhs"><img src="https://avatars.githubusercontent.com/u/161405051?v=4" width="100px;" alt="Huangshuo Kuang"/><br /><sub><b>Huangshuo Kuang</b></sub></a><br /><a href="#code-kkkhs" title="Code">💻</a> <a href="#test-kkkhs" title="Tests">⚠️</a></td>
     </tr>
   </tbody>
 </table>

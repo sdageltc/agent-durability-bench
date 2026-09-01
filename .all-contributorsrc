@@ -19,6 +19,16 @@
         "doc",
         "maintenance"
       ]
+    },
+    {
+      "login": "kkkhs",
+      "name": "Huangshuo Kuang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/161405051?v=4",
+      "profile": "https://github.com/kkkhs",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
