@@ -12,6 +12,7 @@ from adapters.atomic_wal_adapter import AtomicWalAdapter
 from adapters.base import FrameworkAdapter
 from adapters.in_memory_adapter import InMemoryAdapter
 from adapters.snapshot_graph_adapter import SnapshotGraphAdapter
+from adapters.swarm_adapter import SwarmAdapter
 from adapters.unmanaged_script_adapter import UnmanagedScriptAdapter
 
 from harness.schema import DurabilityScore, SyntheticStep, SyntheticTaskSpec
@@ -26,6 +27,7 @@ ADAPTERS: Dict[str, type] = {
     "langgraph": SnapshotGraphAdapter,
     "autogen": InMemoryAdapter,
     "crewai": InMemoryAdapter,
+    "swarm": SwarmAdapter,
     "raw_python": UnmanagedScriptAdapter,
 }
 
@@ -38,6 +40,7 @@ ARCHETYPE_LABELS: Dict[str, str] = {
     "langgraph": "Periodic Snapshot Graph (LangGraph / Pregel)",
     "autogen": "In-Memory Event Loop (AutoGen / CrewAI)",
     "crewai": "In-Memory Event Loop (AutoGen / CrewAI)",
+    "swarm": "OpenAI Swarm Handoff Pattern (In-Memory)",
     "raw_python": "Unmanaged Script Execution (Raw Python CLI)",
 }
 
