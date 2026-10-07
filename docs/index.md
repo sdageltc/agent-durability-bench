@@ -7,7 +7,7 @@ Empirical crash-resilience matrix for AI agent architectural patterns under phys
 
 | Rank | Architectural Archetype & Reference Pattern | Crash Recovery ($R_{crash}$) | Duplicate Token Waste ($W_{token}$) | Resumption Latency | DCP-2.0 Status |
 |:---:|---|:---:|:---:|:---:|:---:|
-| 🥇 | **`Atomic WAL Engine (LetItLoop v0.5.0 / Temporal)`** | `100.0%` | `0.0%` | `1.01 ms` | 🟢 CONFORMANT |
+| 🥇 | **`Atomic WAL Engine (LetItLoop v0.7.0 / Temporal)`** | `100.0%` | `0.0%` | `1.01 ms` | 🟢 CONFORMANT |
 | 🥈 | **`Periodic Snapshot Graph (LangGraph / Pregel)`** | `100.0%` | `14.5%` | `50.76 ms` | 🔴 NON-CONFORMANT |
 | **3** | **`In-Memory Event Loop (AutoGen / CrewAI)`** | `0.0%` | `100.0%` | `0.0 ms` | 🔴 NON-CONFORMANT |
 | **4** | **`Unmanaged Script Execution (Raw Python CLI)`** | `0.0%` | `100.0%` | `0.0 ms` | 🔴 NON-CONFORMANT |
