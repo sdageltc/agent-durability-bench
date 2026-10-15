@@ -1,5 +1,6 @@
 from adapters.atomic_wal_adapter import AtomicWalAdapter
 from adapters.autogen_adapter import AutoGenAdapter
+from adapters.autogen_v04_adapter import AutoGenV04Adapter
 from adapters.base import FrameworkAdapter
 from adapters.crewai_adapter import CrewAIAdapter
 from adapters.in_memory_adapter import InMemoryAdapter
@@ -19,6 +20,7 @@ __all__ = [
     "LangGraphAdapter",
     "InMemoryAdapter",
     "AutoGenAdapter",
+    "AutoGenV04Adapter",
     "CrewAIAdapter",
     "UnmanagedScriptAdapter",
     "RawPythonAdapter",
