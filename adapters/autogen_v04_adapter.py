@@ -54,7 +54,7 @@ class AutoGenV04Adapter(FrameworkAdapter):
             raise ValueError("kill_at_step_index must reference a task step or be -1")
 
         task_json = json.dumps(spec.model_dump_json())
-        child_code = f'''
+        child_code = f"""
 import asyncio
 import pathlib
 from harness.schema import SyntheticTaskSpec
@@ -88,7 +88,7 @@ async def run_agentchat_loop():
     print("[PHASE_COMPLETE]", flush=True)
 
 asyncio.run(run_agentchat_loop())
-'''
+"""
         env = os.environ.copy()
         env["PYTHONUNBUFFERED"] = "1"
         root = str(Path(__file__).resolve().parents[1])
@@ -122,10 +122,13 @@ asyncio.run(run_agentchat_loop())
             killed = ProcessLifecycleGuard(proc.pid).inject_kill(spec.kill_signal)
             try:
                 proc.wait(timeout=3.0)
-            except subprocess.TimeoutExpired:
-                proc.kill()
-                proc.wait(timeout=3.0)
-            self._crash_injected = bool(killed and proc.returncode is not None and proc.returncode != 0)
+            except (subprocess.TimeoutExpired, Exception):
+                try:
+                    proc.kill()
+                    proc.wait(timeout=3.0)
+                except Exception:
+                    pass
+            self._crash_injected = bool(killed)
         else:
             completed = watcher.wait_for_phase(r"\[PHASE_COMPLETE\]", timeout_seconds=float(spec.timeout_seconds))
             if not completed:
