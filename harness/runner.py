@@ -9,6 +9,7 @@ import time
 from typing import Any, Dict, List, Optional
 
 from adapters.atomic_wal_adapter import AtomicWalAdapter
+from adapters.autogen_v04_adapter import AutoGenV04Adapter
 from adapters.base import FrameworkAdapter
 from adapters.in_memory_adapter import InMemoryAdapter
 from adapters.snapshot_graph_adapter import SnapshotGraphAdapter
@@ -21,6 +22,7 @@ ADAPTERS: Dict[str, type] = {
     "atomic_wal": AtomicWalAdapter,
     "snapshot_graph": SnapshotGraphAdapter,
     "in_memory_loop": InMemoryAdapter,
+    "autogen_v04": AutoGenV04Adapter,
     "unmanaged_script": UnmanagedScriptAdapter,
     # Backward compatibility aliases
     "letitloop": AtomicWalAdapter,
@@ -39,6 +41,7 @@ ARCHETYPE_LABELS: Dict[str, str] = {
     "letitloop": "Atomic WAL Engine (LetItLoop / Temporal)",
     "langgraph": "Periodic Snapshot Graph (LangGraph / Pregel)",
     "autogen": "In-Memory Event Loop (AutoGen / CrewAI)",
+    "autogen_v04": "Microsoft AutoGen AgentChat v0.4+ (In-Memory Event Loop)",
     "crewai": "In-Memory Event Loop (AutoGen / CrewAI)",
     "swarm": "OpenAI Swarm Handoff Pattern (In-Memory)",
     "raw_python": "Unmanaged Script Execution (Raw Python CLI)",
