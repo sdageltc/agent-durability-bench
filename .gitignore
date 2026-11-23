@@ -40,3 +40,9 @@ Thumbs.db
 task.md
 *.metadata.json
 scratch/
+/.github/workflows/all-contributors.yml
+/.github/workflows/issue-claim.yml
+/.github/workflows/welcome-bot.yml
+/.github/workflows/stale.yml
+/.github/workflows/release-pypi.yml
+

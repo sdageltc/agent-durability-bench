@@ -34,16 +34,16 @@ ADAPTERS: Dict[str, type] = {
 }
 
 ARCHETYPE_LABELS: Dict[str, str] = {
-    "atomic_wal": "Atomic WAL Engine (LetItLoop / Temporal)",
-    "snapshot_graph": "Periodic Snapshot Graph (LangGraph / Pregel)",
-    "in_memory_loop": "In-Memory Event Loop (AutoGen / CrewAI)",
+    "atomic_wal": "Atomic WAL Engine (Step-Level Checkpointing)",
+    "snapshot_graph": "Periodic Snapshot Graph (Superstep Checkpointing)",
+    "in_memory_loop": "In-Memory Event Loop (Unpersisted Process State)",
     "unmanaged_script": "Unmanaged Script Execution (Raw Python CLI)",
-    "letitloop": "Atomic WAL Engine (LetItLoop / Temporal)",
-    "langgraph": "Periodic Snapshot Graph (LangGraph / Pregel)",
-    "autogen": "In-Memory Event Loop (AutoGen / CrewAI)",
-    "autogen_v04": "Microsoft AutoGen AgentChat v0.4+ (In-Memory Event Loop)",
-    "crewai": "In-Memory Event Loop (AutoGen / CrewAI)",
-    "swarm": "OpenAI Swarm Handoff Pattern (In-Memory)",
+    "letitloop": "Atomic WAL Engine (Step-Level Checkpointing)",
+    "langgraph": "Periodic Snapshot Graph (Superstep Checkpointing)",
+    "autogen": "In-Memory Event Loop (Unpersisted Process State)",
+    "autogen_v04": "AutoGen AgentChat v0.4+ (Unpersisted Process State)",
+    "crewai": "In-Memory Event Loop (Unpersisted Process State)",
+    "swarm": "Handoff Pattern (Unpersisted Process State)",
     "raw_python": "Unmanaged Script Execution (Raw Python CLI)",
 }
 
@@ -454,9 +454,10 @@ class DurabilityBenchmarkRunner:
 
 def main():
     parser = argparse.ArgumentParser(description="Agent Durability Benchmark Runner (DCP-2.0)")
-    parser.add_argument("--matrix", action="store_true", help="Run full cross-framework matrix sweep (legacy)")
+    parser.add_argument("--matrix", "--full-matrix", dest="matrix", action="store_true", help="Run full archetype matrix sweep")
+    parser.add_argument("--all", action="store_true", help="Alias for --compare all")
     parser.add_argument("--framework", default="atomic_wal", help="Target framework adapter")
-    parser.add_argument("--compare", default=None, help="Compare mode: 'all' runs DCP-2.0 matrix across all frameworks")
+    parser.add_argument("--compare", default=None, help="Compare mode: 'all' runs DCP-2.0 matrix across all archetypes")
     parser.add_argument("--scenario", default=None, help="Run single DCP scenario by ID (e.g., DCP-002)")
     parser.add_argument("--signal", default="SIGKILL", help="Fault signal (default SIGKILL)")
     parser.add_argument("--export-json", default="results/leaderboard.json", help="Path to export results JSON")
@@ -465,7 +466,7 @@ def main():
 
     runner = DurabilityBenchmarkRunner()
 
-    if args.compare == "all":
+    if args.compare == "all" or args.all:
         print("=" * 60)
         print("RUNNING DCP-2.0 CONFORMANCE MOAT — COMPARE ALL (4 windows x 4 archetypes)")
         print("=" * 60)

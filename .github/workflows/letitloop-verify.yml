@@ -28,9 +28,11 @@ jobs:
           pip install -e .
 
       - name: Run LetItLoop Verification Action
-        uses: sdageltc/letitloop-action@v1
+        uses: sdageltc/letitloop-action@v2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          strict-ast: 'true'
-          test-command: 'pytest tests/ -v'
-          auto-install-engine: 'false'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          mode: 'gate'
+          wal-dir: '.bench_wal'
+          workspace: '.'
+          fail-closed: 'true'
+          comment: 'false'
